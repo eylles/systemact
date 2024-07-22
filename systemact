@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# systemctl/loginctl command
+ctl=""
+case "$(readlink -f /sbin/init)" in
+	*systemd*) ctl='systemctl' ;;
+	*) ctl='loginctl' ;;
+esac
+
+config="${HOME}/.config/systemact/config.rc"
+logoutcmd=""
+
+if [ -f "$config" ]; then
+    . "$config"
+fi
+
+if [ -z "$logoutcmd" ]; then
+    logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
+fi
+
+case "$1" in
+    lock)
+        xdg-screensaver lock
+        ;;
+    logout)
+        $logoutcmd
+        ;;
+    shutdown|poweroff)
+        $ctl poweroff
+        ;;
+    reboot|restart)
+        $ctl reboot
+        ;;
+    suspend|sleep)
+        $ctl suspend-then-hibernate
+        ;;
+esac
