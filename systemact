@@ -22,6 +22,11 @@ if [ -z "$lockcmd" ]; then
     lockcmd="$ctl lock-session ${XDG_SESSION_ID}"
 fi
 
+
+if [ -z "$suspend_method" ]; then
+    suspend_method="suspend"
+fi
+
 case "$1" in
     lock)
         $lockcmd
@@ -36,6 +41,6 @@ case "$1" in
         $ctl reboot
         ;;
     suspend|sleep)
-        $ctl suspend-then-hibernate
+        $ctl "$suspend_method"
         ;;
 esac

@@ -14,3 +14,11 @@
 # org.freedesktop.ScreenSaver dbus interface, in that case if your screen locker/saver does not
 # implement support for that dbus interface a popular alternative is to use xdg-screensaver lock
 #lockcmd=""
+
+
+# the suspend method
+# it will be used by $clt to suspend the system.
+# you can choose among: suspend, hybrid-sleep, suspend-then-hibernate.
+# mind you, you can only use hybrid-sleep and suspend-then-hibernate if you can hibernate, that is
+# why the default is set to suspend
+#suspend_method=""
