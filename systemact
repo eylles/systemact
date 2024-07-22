@@ -18,9 +18,13 @@ if [ -z "$logoutcmd" ]; then
     logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
 fi
 
+if [ -z "$lockcmd" ]; then
+    lockcmd="$ctl lock-session ${XDG_SESSION_ID}"
+fi
+
 case "$1" in
     lock)
-        xdg-screensaver lock
+        $lockcmd
         ;;
     logout)
         $logoutcmd
