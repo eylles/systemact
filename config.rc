@@ -1,0 +1,16 @@
+# the logout command
+# by default systemact will check if you use systemd to call systemctl, if not then it will default
+# to elogind's loginctl, whichever ctl command is use will be passed:
+#     terminate-session ${XDG_SESSION_ID}.
+# so internally it could be loginctl terminate-session ${XDG_SESSION_ID}
+# make sure whatever logout command you use is on your PATH and works before setting it here as
+# systemact will make no check nor comprobation whatsoever for your custom command
+#logoutcmd=""
+
+# the lock command
+# internally it is defined as $ctl lock-session ${XDG_SESSION_ID}, which is to use whichever the
+# correct ctl command (loginctl or systemctl) is for your system and pass the lock-session and
+# session id, no idea how this is handled internally but may be talking to the
+# org.freedesktop.ScreenSaver dbus interface, in that case if your screen locker/saver does not
+# implement support for that dbus interface a popular alternative is to use xdg-screensaver lock
+#lockcmd=""
