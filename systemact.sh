@@ -7,11 +7,16 @@ case "$(readlink -f /sbin/init)" in
 	*) ctl='loginctl' ;;
 esac
 
-config="${HOME}/.config/systemact/config.rc"
+default_cfg=examples-placeholder/config.rc
+config_dir="${HOME}/.config/systemact"
+config="${config_dir}/config.rc"
 logoutcmd=""
 
 if [ -f "$config" ]; then
     . "$config"
+else
+    mkdir -p "$config_dir"
+    cp "$default_cfg" "$config"
 fi
 
 if [ -z "$logoutcmd" ]; then
