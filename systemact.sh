@@ -12,6 +12,62 @@ config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
 logoutcmd=""
 
+# confirmation dialog
+
+# action image
+act_image=""
+# action title
+text_title=""
+# action message
+text_msg=""
+# window title in taskbar/titlebar
+title_var=""
+# action button text
+btn_act=""
+# message on success
+success_msg=""
+# message on cancel
+cancel_msg=""
+
+
+yad_confirm_dialog () {
+    text="
+    <span><big><b>${text_title}</b></big></span>
+
+    ${text_msg}
+    "
+    btn_cancel="cancel"
+    cancel_img="gnome-info"
+    timeout=60
+    yad \
+        --image "$act_image" \
+        --text "$text" \
+        --buttons-layout=center \
+        --skip-taskbar \
+        --sticky \
+        --undecorated \
+        --title="$title_var" \
+        --on-top \
+        --button="$btn_act" \
+        --button="${btn_cancel}:1" \
+        --timeout-indicator="bottom" \
+        --timeout="$timeout" \
+        --center \
+        --auto-close
+
+    ret=$?
+
+    case "$ret" in
+        0)
+            notify-send -i "$act_image" "$title_var" "$success_msg"
+            ;;
+        1|252)
+            notify-send -i "$cancel_img" "$title_var" "$cancel_msg"
+            ;;
+    esac
+}
+
+
 if [ -f "$config" ]; then
     . "$config"
 else
