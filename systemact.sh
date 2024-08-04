@@ -60,50 +60,14 @@ yad_confirm_dialog () {
     case "$ret" in
         0)
             notify-send -i "$act_image" "$title_var" "$success_msg"
+            printf '%s\n' 0
             ;;
         1|252)
             notify-send -i "$cancel_img" "$title_var" "$cancel_msg"
+            printf '%s\n' 1
             ;;
     esac
 }
-
-#reboot
-act_image="system-reboot"
-text_title="Restart"
-text_msg="The system will reboot automatically in 60 seconds."
-title_var="Reboot"
-btn_act="Rebooot now"
-success_msg="rebooting"
-cancel_msg="cancelled reboot"
-
-#suspend
-act_image="system-suspend"
-text_title="Sleep"
-text_msg="The system will suspend automatically in 60 seconds."
-title_var="Suspend"
-btn_act="Suspend now"
-success_msg="suspending now"
-cancel_msg="cancelled suspend"
-
-#logout
-act_image="system-log-out"
-text_title="Logout"
-text_msg="The system will log out automatically in 60 seconds."
-title_var="Logout"
-btn_act="Logout now"
-success_msg="logging out"
-cancel_msg="logout cancelled"
-
-#shutdown
-act_image="system-shutdown"
-text_title="Power Off"
-text_msg="The system will shutdown automatically in 60 seconds."
-title_var="Shutdown"
-btn_act="Shutdown now"
-success_msg="shutting down"
-cancel_msg="cancelled shutdown"
-
-
 
 if [ -f "$config" ]; then
     . "$config"
