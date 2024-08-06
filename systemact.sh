@@ -12,6 +12,28 @@ config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
 logoutcmd=""
 
+# return type: int
+# usage: min value minimum_value
+min () {
+  if [ "$1" -lt "$2" ]; then
+    result="$2"
+  else
+    result="$1"
+  fi
+  printf '%d\n' "$result"
+}
+
+# return type: int
+# usage: max value maximum_value
+max () {
+  if [ "$1" -gt "$2" ]; then
+    result="$2"
+  else
+    result="$1"
+  fi
+  printf '%d\n' "$result"
+}
+
 # confirmation dialog
 
 # action image
