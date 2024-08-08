@@ -112,24 +112,23 @@ else
     timeout=$( min "$timeout" "$min_timeout" )
 fi
 
-if [ -z "$logoutcmd" ]; then
-    logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
-fi
-
-if [ -z "$lockcmd" ]; then
-    lockcmd="$ctl lock-session ${XDG_SESSION_ID}"
-fi
-
-
-if [ -z "$suspend_method" ]; then
-    suspend_method="suspend"
-fi
-
 case "$1" in
     lock)
+        # check if a lock command was defined in config
+        if [ -z "$lockcmd" ]; then
+            # default
+            lockcmd="$ctl lock-session ${XDG_SESSION_ID}"
+        fi
+
         $lockcmd
         ;;
     logout)
+        # check if a logout command was defined in config
+        if [ -z "$logoutcmd" ]; then
+            # default
+            logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
+        fi
+
         act_image="system-log-out"
         text_title="Logout"
         text_msg="The system will log out automatically in 60 seconds."
@@ -172,6 +171,12 @@ case "$1" in
         fi
         ;;
     suspend|sleep)
+        # check if a suspend method was defined in config
+        if [ -z "$suspend_method" ]; then
+            # default
+            suspend_method="suspend"
+        fi
+
         act_image="system-suspend"
         text_title="Sleep"
         text_msg="The system will suspend automatically in 60 seconds."
