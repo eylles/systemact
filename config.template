@@ -22,3 +22,8 @@
 # mind you, you can only use hybrid-sleep and suspend-then-hibernate if you can hibernate, that is
 # why the default is set to suspend
 #suspend_method=""
+
+
+# the timeout for the confirmation dialog
+# it is min capped to 1/4 of the default timeout and max capped to 4x of the default timeout
+#timeout=60

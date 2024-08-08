@@ -36,6 +36,14 @@ max () {
 
 # confirmation dialog
 
+# 60 seconds
+def_timeout=60
+# 1/4 of default: 15 seconds
+min_timeout=$(( def_timeout / 4 ))
+# 4x  of default: 240 seconds
+max_timeout=$(( def_timeout * 4 ))
+timeout=""
+
 # action image
 act_image=""
 # action title
@@ -60,7 +68,6 @@ yad_confirm_dialog () {
     "
     btn_cancel="cancel"
     cancel_img="gnome-info"
-    timeout=60
     yad \
         --image "$act_image" \
         --text "$text" \
@@ -96,6 +103,13 @@ if [ -f "$config" ]; then
 else
     mkdir -p "$config_dir"
     cp "$default_cfg" "$config"
+fi
+
+if [ -z "$timeout" ]; then
+    timeout=$def_timeout
+else
+    timeout=$( max "$timeout" "$max_timeout" )
+    timeout=$( min "$timeout" "$min_timeout" )
 fi
 
 if [ -z "$logoutcmd" ]; then
