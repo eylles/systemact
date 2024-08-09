@@ -61,6 +61,16 @@ cancel_msg=""
 
 
 yad_confirm_dialog () {
+    # check for timeout value form config
+    if [ -z "$timeout" ]; then
+        timeout=$def_timeout
+    else
+        # max cap timeout to 240 seconds
+        timeout=$( max "$timeout" "$max_timeout" )
+        # min cap tiemout to  15 seconds
+        timeout=$( min "$timeout" "$min_timeout" )
+    fi
+
     text="
     <span><big><b>${text_title}</b></big></span>
 
@@ -103,13 +113,6 @@ if [ -f "$config" ]; then
 else
     mkdir -p "$config_dir"
     cp "$default_cfg" "$config"
-fi
-
-if [ -z "$timeout" ]; then
-    timeout=$def_timeout
-else
-    timeout=$( max "$timeout" "$max_timeout" )
-    timeout=$( min "$timeout" "$min_timeout" )
 fi
 
 case "$1" in
