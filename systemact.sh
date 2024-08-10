@@ -60,6 +60,11 @@ success_msg=""
 cancel_msg=""
 
 
+# return type: int
+# return values: 0, 1
+#     0: True
+#     1: False
+# usage: yad_confirm_dialog
 yad_confirm_dialog () {
     # check for timeout value form config
     if [ -z "$timeout" ]; then
