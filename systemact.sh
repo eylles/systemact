@@ -137,13 +137,20 @@ case "$1" in
             logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
         fi
 
-        act_image="system-log-out"
-        text_title="Logout"
-        text_msg="The system will log out automatically in 60 seconds."
-        title_var="Logout"
-        btn_act="Logout now"
-        success_msg="logging out"
-        cancel_msg="logout cancelled"
+        logout_act_image="system-log-out"
+        logout_text_title="Logout"
+        logout_text_msg="The system will log out automatically in 60 seconds."
+        logout_title_var="Logout"
+        logout_btn_act="Logout now"
+        logout_success_msg="logging out"
+        logout_cancel_msg="logout cancelled"
+        act_image="$logout_act_image"
+        text_title="$logout_text_title"
+        text_msg="$logout_text_msg"
+        title_var="$logout_title_var"
+        btn_act="$logout_btn_act"
+        success_msg="$logout_success_msg"
+        cancel_msg="$logout_cancel_msg"
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
@@ -151,13 +158,20 @@ case "$1" in
         fi
         ;;
     shutdown|poweroff)
-        act_image="system-shutdown"
-        text_title="Power Off"
-        text_msg="The system will shutdown automatically in 60 seconds."
-        title_var="Shutdown"
-        btn_act="Shutdown now"
-        success_msg="shutting down"
-        cancel_msg="cancelled shutdown"
+        shutdown_act_image="system-shutdown"
+        shutdown_text_title="Power Off"
+        shutdown_text_msg="The system will shutdown automatically in 60 seconds."
+        shutdown_title_var="Shutdown"
+        shutdown_btn_act="Shutdown now"
+        shutdown_success_msg="shutting down"
+        shutdown_cancel_msg="cancelled shutdown"
+        act_image="$shutdown_act_image"
+        text_title="$shutdown_text_title"
+        text_msg="$shutdown_text_msg"
+        title_var="$shutdown_title_var"
+        btn_act="$shutdown_btn_act"
+        success_msg="$shutdown_success_msg"
+        cancel_msg="$shutdown_cancel_msg"
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
@@ -165,13 +179,20 @@ case "$1" in
         fi
         ;;
     reboot|restart)
-        act_image="system-reboot"
-        text_title="Restart"
-        text_msg="The system will reboot automatically in 60 seconds."
-        title_var="Reboot"
-        btn_act="Rebooot now"
-        success_msg="rebooting"
-        cancel_msg="cancelled reboot"
+        reboot_act_image="system-reboot"
+        reboot_text_title="Restart"
+        reboot_text_msg="The system will reboot automatically in 60 seconds."
+        reboot_title_var="Reboot"
+        reboot_btn_act="Rebooot now"
+        reboot_success_msg="rebooting"
+        reboot_cancel_msg="cancelled reboot"
+        act_image="$reboot_act_image"
+        text_title="$reboot_text_title"
+        text_msg="$reboot_text_msg"
+        title_var="$reboot_title_var"
+        btn_act="$reboot_btn_act"
+        success_msg="$reboot_success_msg"
+        cancel_msg="$reboot_cancel_msg"
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
@@ -185,13 +206,20 @@ case "$1" in
             suspend_method="suspend"
         fi
 
-        act_image="system-suspend"
-        text_title="Sleep"
-        text_msg="The system will suspend automatically in 60 seconds."
-        title_var="Suspend"
-        btn_act="Suspend now"
-        success_msg="suspending now"
-        cancel_msg="cancelled suspend"
+        sleep_act_image="system-suspend"
+        sleep_text_title="Sleep"
+        sleep_text_msg="The system will suspend automatically in 60 seconds."
+        sleep_title_var="Suspend"
+        sleep_btn_act="Suspend now"
+        sleep_success_msg="suspending now"
+        sleep_cancel_msg="cancelled suspend"
+        act_image="$sleep_act_image"
+        text_title="$sleep_text_title"
+        text_msg="$sleep_text_msg"
+        title_var="$sleep_title_var"
+        btn_act="$sleep_btn_act"
+        success_msg="$sleep_success_msg"
+        cancel_msg="$sleep_cancel_msg"
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
