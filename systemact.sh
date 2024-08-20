@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# defined as: "${0##*/}"
+myname="${0##*/}"
+
 # systemctl/loginctl command
 ctl=""
 case "$(readlink -f /sbin/init)" in
