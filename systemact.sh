@@ -123,6 +123,31 @@ else
     cp "$default_cfg" "$config"
 fi
 
+_help () {
+        code=0
+    if [ -n "$1" ]; then
+        if [ -z "$2" ]; then
+            av="no argument provided"
+        else
+            av="'$2'"
+        fi
+        printf '%s: %s\n' "$myname" "unknown argument, $av"
+        code="$1"
+    fi
+    printf '%s: %s\n\n' "$myname" "logout and power menu backend utility"
+    printf '%s:\n' "Usage"
+    printf '\t%s\n' "${myname}:  [option] <action>"
+    printf '%s\n' "Actions available:"
+    printf '\t%s\n' "lock"
+    printf '\t%s\n' "logout"
+    printf '\t%s\n' "shutdown/poweroff"
+    printf '\t%s\n' "reboot/restart"
+    printf '\t%s\n' "suspend/sleep"
+    printf '%s\n' "Options:"
+    printf '\t-h, --help\t\tshow this help.\n'
+    exit "$code"
+}
+
 case "$1" in
     lock)
         # check if a lock command was defined in config
@@ -228,5 +253,11 @@ case "$1" in
         if [ "$ret" -eq 0 ]; then
             $ctl "$suspend_method"
         fi
+        ;;
+    -h|--help|help)
+        _help
+        ;;
+    *)
+        _help 1 "${1}"
         ;;
 esac
