@@ -7,7 +7,6 @@ systemact \- logout menu backend
 .IR actions
 .SH DESCRIPTION
 systemact is a backend for logout and power menus with command customization to work on any setup.
-.P
 .SH OPTIONS
 .TP
 .B "\-h, \-\-help"
@@ -28,6 +27,55 @@ Restart the system.
 .TP
 .B "suspend, sleep"
 Suspend the system with a configurable command.
+.SH CONFIGURATION
+.P
+The whole reason of systemact is to have flexibility and provide a backend command for a logout menu
+that works across multiple setups and software stacks, for that purpose many of the actions are done
+through configurable commands so that the users can specify whatever command they want for their
+setup without having to hardcode it anywhere in the software that is actually providing the ui, tho
+systemact will try to default to widely supported commands if the user doesn't specify custom ones.
+.P
+For the purpose of working with multiple software stacks systemact defines the
+.B $ctl
+variable that points to a seat control command,
+.B systemctl
+or
+.B loginctl
+which are provided by systemd and elogind respectively, the ctl command is determined by systemact at
+runtime by checking the symlink in
+.B /sbin/init
+if it contains the string
+.B systemd
+then systemctl will be used, otherwise it will use loginctl.
+.P
+It is important to note that systemact does NOT do any validation for the custom commands as there
+is no easy way to test those, so in that case whatever goes wrong with those is the user's fault.
+.P
+The following options are available:
+.TP
+.B logoutcmd
+Command used to logout the session, by default
+.B $ctl
+terminate-session
+.B ${XDG_SESSION_ID}
+.TP
+.B lockcmd
+Command used to lock the session, by default
+.B $ctl
+lock-session
+.B ${XDG_SESSION_ID}
+.TP
+.B suspend_method
+The method by which the system will be suspended, you can choose between suspend, hybrid-sleep and
+suspend-then-hibernate,
+by default
+.B $clt
+suspend
+.TP
+.B timeout
+The time without user interaction it takes for the action (logout, shutdown, reboot, suspend) to
+run, the time is capped to minimum 15 seconds and maximum 240 seconds.
+.TP
 .SH AUTHOR
 .EX
 eylles                 <ed.ylles1997 at gmail.com>
