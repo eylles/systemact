@@ -7,7 +7,7 @@ EGPREFIX = $(PREFIX)/share/doc/$(NAME)
 .PHONY: install uninstall
 
 $(NAME):
-	sed "s|examples-placeholder|$(EGPREFIX)|" systemact.sh > $(NAME)
+	sed "s|@VERSION|$(VERSION)|; s|examples-placeholder|$(EGPREFIX)|" systemact.sh > $(NAME)
 	cp config.template  config.rc
 
 install: $(NAME)

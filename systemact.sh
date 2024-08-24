@@ -3,6 +3,8 @@
 # defined as: "${0##*/}"
 myname="${0##*/}"
 
+version="@VERSION"
+
 # systemctl/loginctl command
 ctl=""
 case "$(readlink -f /sbin/init)" in
@@ -137,6 +139,7 @@ _help () {
     printf '%s: %s\n\n' "$myname" "logout and power menu backend utility"
     printf '%s:\n' "Usage"
     printf '\t%s\n' "${myname}:  [option] <action>"
+    printf '%s: %s\n' "Version" "$version"
     printf '%s\n' "Actions available:"
     printf '\t%s\n' "lock"
     printf '\t%s\n' "logout"
@@ -145,6 +148,7 @@ _help () {
     printf '\t%s\n' "suspend/sleep"
     printf '%s\n' "Options:"
     printf '\t-h, --help\t\tshow this help.\n'
+    printf '\t-V, --version\t\tshow program version.\n'
     exit "$code"
 }
 
@@ -256,6 +260,9 @@ case "$1" in
         ;;
     -h|--help|help)
         _help
+        ;;
+    -V|--version|version)
+        printf '%s\n' "$version"
         ;;
     *)
         _help 1 "${1}"
