@@ -3,17 +3,21 @@ NAME = systemact
 VERSION = 0.0.0
 PREFIX = $(HOME)/.local
 MANPREFIX = $(PREFIX)/share/man
+LOCALEPREFIX = $(PREFIX)/share/locale
 EGPREFIX = $(PREFIX)/share/doc/$(NAME)
 .PHONY: install uninstall
 
 $(NAME):
-	sed "s|@VERSION|$(VERSION)|; s|examples-placeholder|$(EGPREFIX)|" systemact.sh > $(NAME)
+	sed "s|@VERSION|$(VERSION)|; s|examples-placeholder|$(EGPREFIX)|; s|@locale|$(LOCALEPREFIX)|" \
+		systemact.sh > $(NAME)
 	cp config.template  config.rc
 
 install: $(NAME)
 	chmod 755 $(NAME)
 	mkdir -p $(DESTDIR)${PREFIX}/bin
 	mkdir -p $(DESTDIR)$(EGPREFIX)
+	mkdir -p $(DESTDIR)$(LOCALEPREFIX)/en/LC_MESSAGES
+	msgfmt po/en.po -o $(DESTDIR)$(LOCALEPREFIX)/en/LC_MESSAGES/$(NAME).mo
 	cp -v $(NAME) $(DESTDIR)${PREFIX}/bin/
 	cp -v config.rc $(DESTDIR)$(EGPREFIX)/
 	sed "s!VERSION!$(VERSION)!g" systemact.1 > $(DESTDIR)$(MANPREFIX)/man1/$(NAME).1
