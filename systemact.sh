@@ -71,6 +71,9 @@ cancel_msg=""
 #     1: False
 # usage: yad_confirm_dialog
 yad_confirm_dialog () {
+    # function's return value
+    # defaulting to 1 just to be safe
+    retval=1
     # check for timeout value form config
     if [ -z "$timeout" ]; then
         timeout=$def_timeout
@@ -109,13 +112,15 @@ yad_confirm_dialog () {
     case "$ret" in
         0)
             notify-send -i "$act_image" "$title_var" "$success_msg"
-            printf '%s\n' 0
+            retval=0
             ;;
         1|252)
             notify-send -i "$cancel_img" "$title_var" "$cancel_msg"
-            printf '%s\n' 1
+            retval=1
             ;;
     esac
+
+    return "$retval"
 }
 
 if [ -f "$config" ]; then
