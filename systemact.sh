@@ -82,7 +82,7 @@ yad_confirm_dialog () {
     else
         # max cap timeout to 240 seconds
         timeout=$( max "$timeout" "$max_timeout" )
-        # min cap tiemout to  15 seconds
+        # min cap timeout to  15 seconds
         timeout=$( min "$timeout" "$min_timeout" )
     fi
 
