@@ -12,7 +12,7 @@ case "$(readlink -f /sbin/init)" in
 	*) ctl='loginctl' ;;
 esac
 
-default_cfg=examples-placeholder/config.rc
+default_cfg=@examples/config.rc
 config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
 logoutcmd=""
