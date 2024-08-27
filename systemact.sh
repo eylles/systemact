@@ -91,7 +91,7 @@ yad_confirm_dialog () {
 
     ${text_msg}
     "
-    btn_cancel="cancel"
+    btn_cancel="$(gettext "$myname" 'btn_cancel')"
     cancel_img="gnome-info"
     yad \
         --image "$act_image" \

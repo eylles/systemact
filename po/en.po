@@ -49,3 +49,6 @@ msgid  "sleep_success_msg"
 msgstr "suspending now"
 msgid  "sleep_cancel_msg"
 msgstr "cancelled suspend"
+
+msgid  "btn_cancel"
+msgstr "Cancel"
