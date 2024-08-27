@@ -49,3 +49,6 @@ msgid  "sleep_success_msg"
 msgstr ""
 msgid  "sleep_cancel_msg"
 msgstr ""
+
+msgid  "btn_cancel"
+msgstr ""
