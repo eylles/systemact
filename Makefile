@@ -18,6 +18,8 @@ install: $(NAME)
 	mkdir -p $(DESTDIR)$(EGPREFIX)
 	mkdir -p $(DESTDIR)$(LOCALEPREFIX)/en/LC_MESSAGES
 	msgfmt po/en.po -o $(DESTDIR)$(LOCALEPREFIX)/en/LC_MESSAGES/$(NAME).mo
+	mkdir -p $(DESTDIR)$(LOCALEPREFIX)/es/LC_MESSAGES
+	msgfmt po/es.po -o $(DESTDIR)$(LOCALEPREFIX)/es/LC_MESSAGES/$(NAME).mo
 	cp -v $(NAME) $(DESTDIR)${PREFIX}/bin/
 	cp -v config.rc $(DESTDIR)$(EGPREFIX)/
 	sed "s!VERSION!$(VERSION)!g" systemact.1 > $(DESTDIR)$(MANPREFIX)/man1/$(NAME).1
