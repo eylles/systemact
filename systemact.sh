@@ -178,7 +178,7 @@ case "$1" in
 
         logout_act_image="system-log-out"
         logout_text_title="$(gettext "$myname" 'logout_text_title')"
-        logout_text_msg="$(gettext "$myname" 'logout_text_msg')"
+        logout_text_msg="$(gettext "$myname" 'logout_text_msg') $timeout $(gettext "$myname" 'seconds')."
         logout_title_var="$(gettext "$myname" 'logout_title_var')"
         logout_btn_act="$(gettext "$myname" 'logout_btn_act')"
         logout_success_msg="$(gettext "$myname" 'logout_success_msg')"
@@ -199,7 +199,7 @@ case "$1" in
     shutdown|poweroff)
         shutdown_act_image="system-shutdown"
         shutdown_text_title="$(gettext "$myname" 'shutdown_text_title')"
-        shutdown_text_msg="$(gettext "$myname" 'shutdown_text_msg')"
+        shutdown_text_msg="$(gettext "$myname" 'shutdown_text_msg') $timeout $(gettext "$myname" 'seconds')."
         shutdown_title_var="$(gettext "$myname" 'shutdown_title_var')"
         shutdown_btn_act="$(gettext "$myname" 'shutdown_btn_act')"
         shutdown_success_msg="$(gettext "$myname" 'shutdown_success_msg')"
@@ -220,7 +220,7 @@ case "$1" in
     reboot|restart)
         reboot_act_image="system-reboot"
         reboot_text_title="$(gettext "$myname" 'reboot_text_title')"
-        reboot_text_msg="$(gettext "$myname" 'reboot_text_msg')"
+        reboot_text_msg="$(gettext "$myname" 'reboot_text_msg') $timeout $(gettext "$myname" 'seconds')."
         reboot_title_var="$(gettext "$myname" 'reboot_title_var')"
         reboot_btn_act="$(gettext "$myname" 'reboot_btn_act')"
         reboot_success_msg="$(gettext "$myname" 'reboot_success_msg')"
@@ -247,7 +247,7 @@ case "$1" in
 
         sleep_act_image="system-suspend"
         sleep_text_title="$(gettext "$myname" 'sleep_text_title')"
-        sleep_text_msg="$(gettext "$myname" "sleep_text_msg")"
+        sleep_text_msg="$(gettext "$myname" "sleep_text_msg") $timeout $(gettext "$myname" 'seconds')."
         sleep_title_var="$(gettext "$myname" 'sleep_title_var')"
         sleep_btn_act="$(gettext "$myname" 'sleep_btn_act')"
         sleep_success_msg="$(gettext "$myname" 'sleep_success_msg')"

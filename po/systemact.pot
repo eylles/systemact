@@ -58,3 +58,6 @@ msgstr ""
 
 msgid  "btn_cancel"
 msgstr ""
+
+msgid  "seconds"
+msgstr ""
