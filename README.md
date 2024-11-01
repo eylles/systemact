@@ -10,6 +10,7 @@ of setups.
 <a href="https://liberapay.com/eylles/donate"><img alt="Donate using Liberapay" src="https://img.shields.io/liberapay/patrons/eylles.svg?logo=liberapay"></a>
 </p>
 
+![dialog screenshot](dialog.png)
 
 ## Features:
 
