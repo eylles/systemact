@@ -5,6 +5,43 @@ myname="${0##*/}"
 
 version="@VERSION"
 
+################
+# message vars #
+################
+
+logout_text_title="Logout"
+logout_text_msg="The system will log out automatically in"
+logout_title_var="Logout"
+logout_btn_act="Logout now"
+logout_success_msg="logging out"
+logout_cancel_msg="logout cancelled"
+
+shutdown_text_title="Power Off"
+shutdown_text_msg="The system will shutdown automatically in"
+shutdown_title_var="Shutdown"
+shutdown_btn_act="Shutdown now"
+shutdown_success_msg="shutting down"
+shutdown_cancel_msg="cancelled shutdown"
+
+reboot_text_title="Restart"
+reboot_text_msg="The system will reboot automatically in"
+reboot_title_var="Reboot"
+reboot_btn_act="Rebooot now"
+reboot_success_msg="rebooting"
+reboot_cancel_msg="cancelled reboot"
+
+sleep_text_title="Sleep"
+sleep_text_msg="The system will suspend automatically in"
+sleep_title_var="Suspend"
+sleep_btn_act="Suspend now"
+sleep_success_msg="suspending now"
+sleep_cancel_msg="cancelled suspend"
+
+btn_cancel="Cancel"
+
+seconds="seconds"
+
+
 # systemctl/loginctl command
 ctl=""
 case "$(readlink -f /sbin/init)" in
@@ -91,7 +128,7 @@ yad_confirm_dialog () {
 
     ${text_msg}
     "
-    btn_cancel="$(gettext "$myname" 'btn_cancel')"
+    btn_cancel="$(gettext "$myname" "$btn_cancel")"
     cancel_img="gnome-info"
     yad \
         --image "$act_image" \
@@ -177,12 +214,12 @@ case "$1" in
         fi
 
         logout_act_image="system-log-out"
-        logout_text_title="$(gettext "$myname" 'logout_text_title')"
-        logout_text_msg="$(gettext "$myname" 'logout_text_msg') $timeout $(gettext "$myname" 'seconds')."
-        logout_title_var="$(gettext "$myname" 'logout_title_var')"
-        logout_btn_act="$(gettext "$myname" 'logout_btn_act')"
-        logout_success_msg="$(gettext "$myname" 'logout_success_msg')"
-        logout_cancel_msg="$(gettext "$myname" 'logout_cancel_msg')"
+        logout_text_title="$(gettext "$myname" "$logout_text_title")"
+        logout_text_msg="$(gettext "$myname" "$logout_text_msg") $timeout $(gettext "$myname" "$seconds")."
+        logout_title_var="$(gettext "$myname" "$logout_title_var")"
+        logout_btn_act="$(gettext "$myname" "$logout_btn_act")"
+        logout_success_msg="$(gettext "$myname" "$logout_success_msg")"
+        logout_cancel_msg="$(gettext "$myname" "$logout_cancel_msg")"
         act_image="$logout_act_image"
         text_title="$logout_text_title"
         text_msg="$logout_text_msg"
@@ -198,12 +235,12 @@ case "$1" in
         ;;
     shutdown|poweroff)
         shutdown_act_image="system-shutdown"
-        shutdown_text_title="$(gettext "$myname" 'shutdown_text_title')"
-        shutdown_text_msg="$(gettext "$myname" 'shutdown_text_msg') $timeout $(gettext "$myname" 'seconds')."
-        shutdown_title_var="$(gettext "$myname" 'shutdown_title_var')"
-        shutdown_btn_act="$(gettext "$myname" 'shutdown_btn_act')"
-        shutdown_success_msg="$(gettext "$myname" 'shutdown_success_msg')"
-        shutdown_cancel_msg="$(gettext "$myname" 'shutdown_cancel_msg')"
+        shutdown_text_title="$(gettext "$myname" "$shutdown_text_title")"
+        shutdown_text_msg="$(gettext "$myname" "$shutdown_text_msg") $timeout $(gettext "$myname" "$seconds")."
+        shutdown_title_var="$(gettext "$myname" "$shutdown_title_var")"
+        shutdown_btn_act="$(gettext "$myname" "$shutdown_btn_act")"
+        shutdown_success_msg="$(gettext "$myname" "$shutdown_success_msg")"
+        shutdown_cancel_msg="$(gettext "$myname" "$shutdown_cancel_msg")"
         act_image="$shutdown_act_image"
         text_title="$shutdown_text_title"
         text_msg="$shutdown_text_msg"
@@ -219,12 +256,12 @@ case "$1" in
         ;;
     reboot|restart)
         reboot_act_image="system-reboot"
-        reboot_text_title="$(gettext "$myname" 'reboot_text_title')"
-        reboot_text_msg="$(gettext "$myname" 'reboot_text_msg') $timeout $(gettext "$myname" 'seconds')."
-        reboot_title_var="$(gettext "$myname" 'reboot_title_var')"
-        reboot_btn_act="$(gettext "$myname" 'reboot_btn_act')"
-        reboot_success_msg="$(gettext "$myname" 'reboot_success_msg')"
-        reboot_cancel_msg="$(gettext "$myname" 'reboot_cancel_msg')"
+        reboot_text_title="$(gettext "$myname" "$reboot_text_title")"
+        reboot_text_msg="$(gettext "$myname" "$reboot_text_msg") $timeout $(gettext "$myname" "$seconds")."
+        reboot_title_var="$(gettext "$myname" "$reboot_title_var")"
+        reboot_btn_act="$(gettext "$myname" "$reboot_btn_act")"
+        reboot_success_msg="$(gettext "$myname" "$reboot_success_msg")"
+        reboot_cancel_msg="$(gettext "$myname" "$reboot_cancel_msg")"
         act_image="$reboot_act_image"
         text_title="$reboot_text_title"
         text_msg="$reboot_text_msg"
@@ -246,12 +283,12 @@ case "$1" in
         fi
 
         sleep_act_image="system-suspend"
-        sleep_text_title="$(gettext "$myname" 'sleep_text_title')"
-        sleep_text_msg="$(gettext "$myname" "sleep_text_msg") $timeout $(gettext "$myname" 'seconds')."
-        sleep_title_var="$(gettext "$myname" 'sleep_title_var')"
-        sleep_btn_act="$(gettext "$myname" 'sleep_btn_act')"
-        sleep_success_msg="$(gettext "$myname" 'sleep_success_msg')"
-        sleep_cancel_msg="$(gettext "$myname" 'sleep_cancel_msg')"
+        sleep_text_title="$(gettext "$myname" "$sleep_text_title")"
+        sleep_text_msg="$(gettext "$myname" "$sleep_text_msg") $timeout $(gettext "$myname" "$seconds")."
+        sleep_title_var="$(gettext "$myname" "$sleep_title_var")"
+        sleep_btn_act="$(gettext "$myname" "$sleep_btn_act")"
+        sleep_success_msg="$(gettext "$myname" "$sleep_success_msg")"
+        sleep_cancel_msg="$(gettext "$myname" "$sleep_cancel_msg")"
         act_image="$sleep_act_image"
         text_title="$sleep_text_title"
         text_msg="$sleep_text_msg"
