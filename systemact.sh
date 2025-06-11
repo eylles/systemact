@@ -149,7 +149,7 @@ yad_confirm_dialog () {
     ret=$?
 
     case "$ret" in
-        0)
+        0|70)
             notify-send -i "$act_image" "$title_var" "$success_msg"
             retval=0
             ;;
