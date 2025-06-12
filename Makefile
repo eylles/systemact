@@ -23,8 +23,6 @@ install: $(NAME)
 	cp -v $(NAME) $(DESTDIR)${PREFIX}/bin/
 	cp -v config.rc $(DESTDIR)$(EGPREFIX)/
 	sed "s!VERSION!$(VERSION)!g" systemact.1 > $(DESTDIR)$(MANPREFIX)/man1/$(NAME).1
-	rm $(NAME)
-	rm config.rc
 
 uninstall:
 	rm -vf $(DESTDIR)$(PREFIX)/bin/$(NAME)
