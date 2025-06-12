@@ -5,7 +5,7 @@ PREFIX = $(HOME)/.local
 MANPREFIX = $(PREFIX)/share/man
 LOCALEPREFIX = $(PREFIX)/share/locale
 EGPREFIX = $(PREFIX)/share/doc/$(NAME)
-.PHONY: install uninstall
+.PHONY: install uninstall clean
 
 $(NAME):
 	sed "s|@VERSION|$(VERSION)|; s|@examples|$(EGPREFIX)|; s|@locale|$(LOCALEPREFIX)|" \
@@ -30,3 +30,5 @@ uninstall:
 	rm -vf $(DESTDIR)$(EGPREFIX)/config.rc
 	rm -rf $(DESTDIR)$(EGPREFIX)
 
+clean:
+	rm -rf $(NAME) config.rc
