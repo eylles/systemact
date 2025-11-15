@@ -44,10 +44,12 @@ seconds="seconds"
 
 # systemctl/loginctl command
 ctl=""
-case "$(readlink -f /sbin/init)" in
-	*systemd*) ctl='systemctl' ;;
-	*) ctl='loginctl' ;;
-esac
+if command -v systemctl ; then
+    ctl="$(command -v systemctl)"
+fi
+if command -v loginctl ; then
+    ctl="$(command -v loginctl)"
+fi
 
 default_cfg=@examples/config.rc
 config_dir="${HOME}/.config/systemact"
