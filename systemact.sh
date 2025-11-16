@@ -190,10 +190,10 @@ _help () {
 
 # systemctl/loginctl command
 ctl=""
-if command -v systemctl ; then
+if command -v systemctl >/dev/null ; then
     ctl="$(command -v systemctl)"
 fi
-if command -v loginctl ; then
+if command -v loginctl >/dev/null ; then
     ctl="$(command -v loginctl)"
 fi
 
