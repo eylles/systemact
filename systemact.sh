@@ -41,16 +41,6 @@ btn_cancel="Cancel"
 
 seconds="seconds"
 
-
-# systemctl/loginctl command
-ctl=""
-if command -v systemctl ; then
-    ctl="$(command -v systemctl)"
-fi
-if command -v loginctl ; then
-    ctl="$(command -v loginctl)"
-fi
-
 default_cfg=@examples/config.rc
 config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
@@ -197,6 +187,15 @@ _help () {
     printf '\t-V, --version\t\tshow program version.\n'
     exit "$code"
 }
+
+# systemctl/loginctl command
+ctl=""
+if command -v systemctl ; then
+    ctl="$(command -v systemctl)"
+fi
+if command -v loginctl ; then
+    ctl="$(command -v loginctl)"
+fi
 
 case "$1" in
     lock)
