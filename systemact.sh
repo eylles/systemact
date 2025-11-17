@@ -197,6 +197,28 @@ if command -v loginctl >/dev/null ; then
     ctl="$(command -v loginctl)"
 fi
 
+# return type: bool
+# usage: is_call_implemented <function_name>
+is_call_implemented() {
+	PATH="" command -V "$1" >/dev/null 2>&1
+}
+
+# return type: exit status int
+# usage: call <function_name>
+# description:
+#     provides mechanism for calling user override definition for called
+#     function, if function_name_override exists then it is called otherwise
+#     calls function_name
+call() {
+	cmd="$1"
+	shift
+	if is_call_implemented "${cmd}_override" ; then
+	    ${cmd}_override "$@"
+	else
+        ${cmd} "$@"
+    fi
+}
+
 case "$1" in
     lock)
         # check if a lock command was defined in config
