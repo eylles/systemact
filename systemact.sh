@@ -197,6 +197,71 @@ if command -v loginctl >/dev/null ; then
     ctl="$(command -v loginctl)"
 fi
 
+# usage: do_ctl action options
+# action:
+#         lock-session
+#         terminate-session
+#         poweroff
+#         suspend
+#         hibernate
+#         hybrid-sleep
+#         suspend-then-hibernate
+do_ctl () {
+    action="$1"
+    shift
+    case "$ctl" in
+        *systemctl|*loginctl)
+            $ctl "$action" "$@"
+            ;;
+    esac
+}
+
+do_lock () {
+    # check if a lock command was defined in config
+    if [ -z "$lockcmd" ]; then
+        # default
+        do_ctl lock-session "${XDG_SESSION_ID}"
+    else
+        $lockcmd
+    fi
+
+}
+
+do_logout () {
+    # check if a logout command was defined in config
+    if [ -z "$logoutcmd" ]; then
+        # default
+        do_ctl terminate-session "${XDG_SESSION_ID}"
+    else
+        $logoutcmd
+    fi
+
+}
+
+do_poweroff () {
+    do_ctl poweroff
+}
+
+do_reboot () {
+    do_ctl reboot
+}
+
+do_suspend () {
+    do_ctl suspend
+}
+
+do_hibernate () {
+    do_ctl hibernate
+}
+
+do_hybrid_sleep () {
+    do_ctl hybrid-sleep
+}
+
+do_suspend_then_hibernate () {
+    do_ctl suspend
+}
+
 # return type: bool
 # usage: is_call_implemented <function_name>
 is_call_implemented() {
