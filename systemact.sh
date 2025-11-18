@@ -284,23 +284,41 @@ call() {
     fi
 }
 
+# return type: exit status int
+# usage: do_sleep
+# description:
+#     wrapper function that checks the configurable $suspend_method variable and then calls
+#     the corresponding function
+do_sleep () {
+    # check if a suspend method was defined in config
+    if [ -z "$suspend_method" ]; then
+        # default
+        suspend_method="suspend"
+    fi
+    case "$suspend_method" in
+        suspend)
+            call do_suspend
+            ;;
+        hibernate)
+            call do_hibernate
+            ;;
+        hybrid-sleep)
+            call do_hybrid_sleep
+            ;;
+        suspend-then-hibernate)
+            call do_suspend_then_hibernate
+            ;;
+        *)
+            call do_suspend
+            ;;
+    esac
+}
+
 case "$1" in
     lock)
-        # check if a lock command was defined in config
-        if [ -z "$lockcmd" ]; then
-            # default
-            lockcmd="$ctl lock-session ${XDG_SESSION_ID}"
-        fi
-
-        $lockcmd
+        call do_lock
         ;;
     logout)
-        # check if a logout command was defined in config
-        if [ -z "$logoutcmd" ]; then
-            # default
-            logoutcmd="$ctl terminate-session ${XDG_SESSION_ID}"
-        fi
-
         logout_act_image="system-log-out"
         logout_text_title="$(gettext "$myname" "$logout_text_title")"
         logout_text_msg="$(gettext "$myname" "$logout_text_msg") $timeout $(gettext "$myname" "$seconds")."
@@ -318,7 +336,7 @@ case "$1" in
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
-            $logoutcmd
+            call do_logout
         fi
         ;;
     shutdown|poweroff)
@@ -339,7 +357,7 @@ case "$1" in
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
-            $ctl poweroff
+            call do_poweroff
         fi
         ;;
     reboot|restart)
@@ -360,16 +378,10 @@ case "$1" in
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
-            $ctl reboot
+            call do_reboot
         fi
         ;;
     suspend|sleep)
-        # check if a suspend method was defined in config
-        if [ -z "$suspend_method" ]; then
-            # default
-            suspend_method="suspend"
-        fi
-
         sleep_act_image="system-suspend"
         sleep_text_title="$(gettext "$myname" "$sleep_text_title")"
         sleep_text_msg="$(gettext "$myname" "$sleep_text_msg") $timeout $(gettext "$myname" "$seconds")."
@@ -387,7 +399,7 @@ case "$1" in
         yad_confirm_dialog
         ret=$?
         if [ "$ret" -eq 0 ]; then
-            $ctl "$suspend_method"
+            call do_sleep
         fi
         ;;
     -h|--help|help)
