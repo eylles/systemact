@@ -197,6 +197,10 @@ if command -v loginctl >/dev/null ; then
     ctl="$(command -v loginctl)"
 fi
 
+systemloginctl_handler () {
+    $ctl "$@"
+}
+
 # usage: do_ctl action options
 # action:
 #         lock-session
@@ -211,7 +215,7 @@ do_ctl () {
     shift
     case "$ctl" in
         *systemctl|*loginctl)
-            $ctl "$action" "$@"
+            systemloginctl_handler "$action" "$@"
             ;;
     esac
 }
