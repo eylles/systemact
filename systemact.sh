@@ -80,7 +80,7 @@ min_timeout=$(( def_timeout / 4 ))
 max_timeout=$(( def_timeout * 4 ))
 timeout=""
 
-export TEXTDOMAINDIR="@locale"
+export TEXTDOMAINDIR="@localeprefix"
 
 # action image
 act_image=""
