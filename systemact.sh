@@ -5,6 +5,8 @@ myname="${0##*/}"
 
 version="@VERSION"
 
+DBGOUT=""
+
 ################
 # message vars #
 ################
@@ -198,7 +200,13 @@ if command -v loginctl >/dev/null ; then
 fi
 
 systemloginctl_handler () {
-    $ctl "$@"
+    Action="$1"
+    shift
+    opt="$*"
+    if [ -n "$DBGOUT" ]; then
+        printf '%s: %s\n' "$myname" "handling $ctl $Action $opt"
+    fi
+    $ctl "$Action" "$@"
 }
 
 # usage: do_ctl action options
@@ -213,6 +221,9 @@ systemloginctl_handler () {
 do_ctl () {
     action="$1"
     shift
+    if [ -n "$DBGOUT" ]; then
+        printf '%s: %s\n' "$myname" "handling $action with $ctl"
+    fi
     case "$ctl" in
         *systemctl|*loginctl)
             systemloginctl_handler "$action" "$@"
@@ -226,6 +237,9 @@ do_lock () {
         # default
         do_ctl lock-session "${XDG_SESSION_ID}"
     else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "locking with '$lockcmd'"
+        fi
         $lockcmd
     fi
 
@@ -237,6 +251,9 @@ do_logout () {
         # default
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "logging out with '$lockcmd'"
+        fi
         $logoutcmd
     fi
 
@@ -282,8 +299,14 @@ call() {
 	cmd="$1"
 	shift
 	if is_call_implemented "${cmd}_override" ; then
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "calling ${cmd}_override"
+        fi
 	    ${cmd}_override "$@"
 	else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "calling $cmd"
+        fi
         ${cmd} "$@"
     fi
 }
@@ -318,7 +341,10 @@ do_sleep () {
     esac
 }
 
-case "$1" in
+while [ $# -gt 0 ]; do case "$1" in
+    debug|-debug|-d)
+        DBGOUT=1
+        ;;
     lock)
         call do_lock
         ;;
@@ -416,3 +442,5 @@ case "$1" in
         _help 1 "${1}"
         ;;
 esac
+shift
+done
