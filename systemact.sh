@@ -198,6 +198,9 @@ fi
 if command -v loginctl >/dev/null ; then
     ctl="$(command -v loginctl)"
 fi
+if command -v ck-launch-session >/dev/null ; then
+    ctl="consolekit"
+fi
 
 systemloginctl_handler () {
     Action="$1"
@@ -207,6 +210,64 @@ systemloginctl_handler () {
         printf '%s: %s\n' "$myname" "handling $ctl $Action $opt"
     fi
     $ctl "$Action" "$@"
+}
+
+consolekit_handler () {
+    Action="$1"
+    opt="$*"
+    case "$Action" in
+        lock-session)
+            if [ -n "$DBGOUT" ]; then
+                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
+            fi
+            Action=""
+            opt=""
+            ;;
+        terminate-session)
+            if [ -n "$DBGOUT" ]; then
+                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
+            fi
+            Action=""
+            opt=""
+            ;;
+        poweroff)
+            Action="Stop"
+            ;;
+        reboot)
+            Action="Restart"
+            ;;
+        suspend)
+            Action="Suspend"
+            opt="boolean:true"
+            ;;
+        hibernate)
+            Action="Hibernate"
+            opt="boolean:true"
+            ;;
+        hybrid-sleep)
+            Action="HybridSleep"
+            opt="boolean:true"
+            ;;
+        suspend-then-hibernate)
+            if [ -n "$DBGOUT" ]; then
+                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
+            fi
+            Action=""
+            opt=""
+            ;;
+    esac
+    if [ -z "$Action" ]; then
+        exit 1
+    else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "handling $ctl $Action $opt"
+        fi
+        dbus-send \
+            --system \
+            --print-reply \
+            --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager \
+            "org.freedesktop.ConsoleKit.Manager.$Action" "$opt"
+    fi
 }
 
 # usage: do_ctl action options
@@ -227,6 +288,9 @@ do_ctl () {
     case "$ctl" in
         *systemctl|*loginctl)
             systemloginctl_handler "$action" "$@"
+            ;;
+        consolekit)
+            consolekit_handler "$action" "$@"
             ;;
     esac
 }
