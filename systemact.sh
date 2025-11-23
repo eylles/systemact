@@ -275,6 +275,7 @@ consolekit_handler () {
 #         lock-session
 #         terminate-session
 #         poweroff
+#         reboot
 #         suspend
 #         hibernate
 #         hybrid-sleep
