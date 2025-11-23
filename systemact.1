@@ -37,16 +37,19 @@ systemact will try to default to widely supported commands if the user doesn't s
 .P
 For the purpose of working with multiple software stacks systemact defines the
 .B $ctl
-variable that points to a seat control command,
+variable that points to a seat control facility, usually
 .B systemctl
 or
 .B loginctl
-which are provided by systemd and elogind respectively, the ctl command is determined by systemact at
-runtime by checking the symlink in
+which are provided by systemd and elogind respectively, the ctl command is determined by systemact
+at runtime by checking the available commands in the system via command -v, it used to check the
+symlink in
 .B /sbin/init
 if it contains the string
 .B systemd
-then systemctl will be used, otherwise it will use loginctl.
+but the new method is more reliable as some setups may be using systemd as a service and login
+manager but not as init, for example using runit to provide pid1, this new method also allows us to
+check for the usage of consolekit.
 .P
 It is important to note that systemact does NOT do any validation for the custom commands as there
 is no easy way to test those, so in that case whatever goes wrong with those is the user's fault.
@@ -55,13 +58,13 @@ The following options are available:
 .TP
 .B logoutcmd
 Command used to logout the session, by default
-.B $ctl
+.B do_ctl
 terminate-session
 .B ${XDG_SESSION_ID}
 .TP
 .B lockcmd
 Command used to lock the session, by default
-.B $ctl
+.B do_ctl
 lock-session
 .B ${XDG_SESSION_ID}
 .TP
@@ -69,12 +72,130 @@ lock-session
 The method by which the system will be suspended, you can choose between suspend, hybrid-sleep and
 suspend-then-hibernate,
 by default
-.B $clt
+.B do_ctl
 suspend
 .TP
 .B timeout
 The time without user interaction it takes for the action (logout, shutdown, reboot, suspend) to
 run, the time is capped to minimum 15 seconds and maximum 240 seconds.
+.SH FUNCTION OVERRIDES
+Internally systemact uses a scheme of wrapper functions to offhand the work, we have 2 wrappers of
+note which are
+.B do_ctl
+and
+.B call
+.TP
+.B do_ctl
+a wrapper command that allows us to send action commands onto a login manager handler, such as the
+one for (e)logind or consolekit, it is concerned with receiving the actions like: lock-session,
+terminate-session, poweroff, reboot, suspend, etc...
+.TP
+.B call
+a wrapper command that checks if an override for the requested function exists and if it does it
+proceeds to run it, the override function is expected to be in the form of <cmd>_override, so for
+the do_lock function call would look for a function called do_lock_override.
+.TP
+.B do_sleep
+a wrapper function that handles the
+.B suspend_method
+variable and offhands the action to one of the following functions: do_suspend, do_hibernate,
+do_hybrid_sleep, do_suspend_then_hibernate
+.P
+The following functions are available for override: do_lock, do_logout, do_poweroff, do_reboot,
+do_sleep, do_suspend, do_hibernate, do_hybrid_sleep, do_suspend_then_hibernate
+
+In spite of the name
+.B config.rc
+the config file for systemact is a simple text file that is loaded as if it were a shell script,
+therefore you should be able to write overrides for the functions as simple posix shell functions,
+you should be able to utilize systemact's internal functions inside your custom overrides like the
+do_ctl function in order to add hooks onto do_<action> functions like this:
+
+do_lock_override () {
+    # pause all media players
+    playerctl -a pause
+    # in this case the do_ctl function was okay
+    do_ctl lock-session "${XDG_SESSION_ID}"
+
+}
+
+For the do_<action> functions are rather simple and their internals are as follows:
+
+.IR do_lock
+() {
+    # check if a lock command was defined in config
+    if [ -z "$lockcmd" ]; then
+        # default
+        do_ctl lock-session "${XDG_SESSION_ID}"
+    else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "locking with '$lockcmd'"
+        fi
+        $lockcmd
+    fi
+
+}
+
+.IR do_logout
+() {
+    # check if a logout command was defined in config
+    if [ -z "$logoutcmd" ]; then
+        # default
+        do_ctl terminate-session "${XDG_SESSION_ID}"
+    else
+        if [ -n "$DBGOUT" ]; then
+            printf '%s: %s\n' "$myname" "logging out with '$lockcmd'"
+        fi
+        $logoutcmd
+    fi
+
+}
+
+.IR do_poweroff
+() { do_ctl poweroff }
+
+.IR do_reboot
+() { do_ctl reboot }
+
+.IR do_suspend
+() { do_ctl suspend }
+
+.IR do_hibernate
+() { do_ctl hibernate }
+
+.IR do_hybrid_sleep
+() { do_ctl hybrid-sleep }
+
+.IR do_suspend_then_hibernate
+() { do_ctl suspend }
+
+.IR do_sleep
+() {
+    # check if a suspend method was defined in config
+    if [ -z "$suspend_method" ]; then
+        # default
+        suspend_method="suspend"
+    fi
+    case "$suspend_method" in
+        suspend)
+            call do_suspend
+            ;;
+        hibernate)
+            call do_hibernate
+            ;;
+        hybrid-sleep)
+            call do_hybrid_sleep
+            ;;
+        suspend-then-hibernate)
+            call do_suspend_then_hibernate
+            ;;
+        *)
+            call do_suspend
+            ;;
+    esac
+
+}
+
 .SH AUTHOR
 .EX
 eylles                 <ed.ylles1997 at gmail.com>
