@@ -20,6 +20,12 @@ of setups.
   - suspend method: from the good old suspend to hibrid sleep and suspend then hibernate fully
     supported.
 
+- Extensible: systemact is not limited to just configuring a logout command, lock command or the
+              suspend method, you the user can also completely override the functions for lock,
+              logout, poweroff, reboot, suspend, hibernate, hybrid-sleep and suspend-then-hibernate
+              with your own custom functions, commands and scripts if you need any additional hooks
+              to run along those actions.
+
 - Reduces work: it provides confirmation dialogs for shutdown, reboot, suspend and logout.
 
 - Minimal: very few dependencies.
@@ -33,4 +39,6 @@ of setups.
 
 - Just Works™: sane defaults that cover most setups.
 
-- Init freedom: using systemd or not is not an issue, systemctl and loginctl are both supported.
+- Init freedom: using systemd or not is not an issue, systemctl and loginctl are both supported, not
+                to mention we also have support for consolekit out of the box and if that is not
+                enough you can overwrite the functions however you need for your setup.
