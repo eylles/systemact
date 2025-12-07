@@ -438,84 +438,60 @@ while [ $# -gt 0 ]; do case "$1" in
         call do_lock
         ;;
     logout)
-        logout_act_image="system-log-out"
-        logout_text_title="$(gettext "$myname" "$logout_text_title")"
-        logout_text_msg="$(gettext "$myname" "$logout_text_msg") $timeout $(gettext "$myname" "$seconds")."
-        logout_title_var="$(gettext "$myname" "$logout_title_var")"
-        logout_btn_act="$(gettext "$myname" "$logout_btn_act")"
-        logout_success_msg="$(gettext "$myname" "$logout_success_msg")"
-        logout_cancel_msg="$(gettext "$myname" "$logout_cancel_msg")"
-        act_image="$logout_act_image"
-        text_title="$logout_text_title"
-        text_msg="$logout_text_msg"
-        title_var="$logout_title_var"
-        btn_act="$logout_btn_act"
-        success_msg="$logout_success_msg"
-        cancel_msg="$logout_cancel_msg"
-        yad_confirm_dialog
+        yad_confirm_dialog \
+            "system-log-out" \
+            "$logout_text_title" \
+            "$logout_text_msg" \
+            "$seconds" \
+            "$logout_title_var" \
+            "$logout_btn_act" \
+            "$logout_success_msg" \
+            "$logout_cancel_msg"
         ret=$?
         if [ "$ret" -eq 0 ]; then
             call do_logout
         fi
         ;;
     shutdown|poweroff)
-        shutdown_act_image="system-shutdown"
-        shutdown_text_title="$(gettext "$myname" "$shutdown_text_title")"
-        shutdown_text_msg="$(gettext "$myname" "$shutdown_text_msg") $timeout $(gettext "$myname" "$seconds")."
-        shutdown_title_var="$(gettext "$myname" "$shutdown_title_var")"
-        shutdown_btn_act="$(gettext "$myname" "$shutdown_btn_act")"
-        shutdown_success_msg="$(gettext "$myname" "$shutdown_success_msg")"
-        shutdown_cancel_msg="$(gettext "$myname" "$shutdown_cancel_msg")"
-        act_image="$shutdown_act_image"
-        text_title="$shutdown_text_title"
-        text_msg="$shutdown_text_msg"
-        title_var="$shutdown_title_var"
-        btn_act="$shutdown_btn_act"
-        success_msg="$shutdown_success_msg"
-        cancel_msg="$shutdown_cancel_msg"
-        yad_confirm_dialog
+        yad_confirm_dialog \
+            "system-shutdown" \
+            "$shutdown_text_title" \
+            "$shutdown_text_msg" \
+            "$seconds" \
+            "$shutdown_title_var" \
+            "$shutdown_btn_act" \
+            "$shutdown_success_msg" \
+            "$shutdown_cancel_msg"
         ret=$?
         if [ "$ret" -eq 0 ]; then
             call do_poweroff
         fi
         ;;
     reboot|restart)
-        reboot_act_image="system-reboot"
-        reboot_text_title="$(gettext "$myname" "$reboot_text_title")"
-        reboot_text_msg="$(gettext "$myname" "$reboot_text_msg") $timeout $(gettext "$myname" "$seconds")."
-        reboot_title_var="$(gettext "$myname" "$reboot_title_var")"
-        reboot_btn_act="$(gettext "$myname" "$reboot_btn_act")"
-        reboot_success_msg="$(gettext "$myname" "$reboot_success_msg")"
-        reboot_cancel_msg="$(gettext "$myname" "$reboot_cancel_msg")"
-        act_image="$reboot_act_image"
-        text_title="$reboot_text_title"
-        text_msg="$reboot_text_msg"
-        title_var="$reboot_title_var"
-        btn_act="$reboot_btn_act"
-        success_msg="$reboot_success_msg"
-        cancel_msg="$reboot_cancel_msg"
-        yad_confirm_dialog
+        yad_confirm_dialog \
+            "system-reboot" \
+            "$reboot_text_title" \
+            "$reboot_text_msg" \
+            "$seconds" \
+            "$reboot_title_var" \
+            "$reboot_btn_act" \
+            "$reboot_success_msg" \
+            "$reboot_cancel_msg"
         ret=$?
         if [ "$ret" -eq 0 ]; then
             call do_reboot
         fi
         ;;
     suspend|sleep)
-        sleep_act_image="system-suspend"
-        sleep_text_title="$(gettext "$myname" "$sleep_text_title")"
-        sleep_text_msg="$(gettext "$myname" "$sleep_text_msg") $timeout $(gettext "$myname" "$seconds")."
-        sleep_title_var="$(gettext "$myname" "$sleep_title_var")"
-        sleep_btn_act="$(gettext "$myname" "$sleep_btn_act")"
-        sleep_success_msg="$(gettext "$myname" "$sleep_success_msg")"
-        sleep_cancel_msg="$(gettext "$myname" "$sleep_cancel_msg")"
-        act_image="$sleep_act_image"
-        text_title="$sleep_text_title"
-        text_msg="$sleep_text_msg"
-        title_var="$sleep_title_var"
-        btn_act="$sleep_btn_act"
-        success_msg="$sleep_success_msg"
-        cancel_msg="$sleep_cancel_msg"
-        yad_confirm_dialog
+        yad_confirm_dialog \
+            "system-suspend" \
+            "$sleep_text_title" \
+            "$sleep_text_msg" \
+            "$seconds" \
+            "$sleep_title_var" \
+            "$sleep_btn_act" \
+            "$sleep_success_msg" \
+            "$sleep_cancel_msg"
         ret=$?
         if [ "$ret" -eq 0 ]; then
             call do_sleep
