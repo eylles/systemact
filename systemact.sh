@@ -102,8 +102,31 @@ cancel_msg=""
 # return values: 0, 1
 #     0: True
 #     1: False
-# usage: yad_confirm_dialog
+# usage: yad_confirm_dialog img title msg sec tvar btn success cancel
+#         img: act_image
+#       title: text_title
+#         msg: text_msg
+#         sec: seconds
+#        tvar: title_var
+#         btn: btn_act
+#     success: success_msg
+#      cancel: cancel_msg
 yad_confirm_dialog () {
+    act_image="$1"
+    text_title="$2"
+    text_msg="$3"
+    seconds="$4"
+    title_var="$5"
+    btn_act="$6"
+    success_msg="$7"
+    cancel_msg="$8"
+    text_title="$(gettext  "$myname" "$text_title")"
+    text_msg="$(gettext    "$myname" "$text_msg")"
+    seconds="$(gettext     "$myname" "$seconds")"
+    title_var="$(gettext   "$myname" "$title_var")"
+    btn_act="$(gettext     "$myname" "$btn_act")"
+    success_msg="$(gettext "$myname" "$success_msg")"
+    cancel_msg="$(gettext  "$myname" "$cancel_msg")"
     # function's return value
     # defaulting to 1 just to be safe
     retval=1
@@ -117,6 +140,7 @@ yad_confirm_dialog () {
         timeout=$( min "$timeout" "$min_timeout" )
     fi
 
+    text_msg="$text_msg $timeout $seconds."
     text="
     <span><big><b>${text_title}</b></big></span>
 
