@@ -120,13 +120,21 @@ yad_confirm_dialog () {
     btn_act="$6"
     success_msg="$7"
     cancel_msg="$8"
-    text_title="$(gettext  "$myname" "$text_title")"
-    text_msg="$(gettext    "$myname" "$text_msg")"
-    seconds="$(gettext     "$myname" "$seconds")"
-    title_var="$(gettext   "$myname" "$title_var")"
-    btn_act="$(gettext     "$myname" "$btn_act")"
-    success_msg="$(gettext "$myname" "$success_msg")"
-    cancel_msg="$(gettext  "$myname" "$cancel_msg")"
+    case "$LANGUAGE" in
+        C*|en*)
+            : # do nothing, no need to translate text
+            ;;
+        *)
+            # try to translate text
+            text_title="$(gettext  "$myname" "$text_title")"
+            text_msg="$(gettext    "$myname" "$text_msg")"
+            seconds="$(gettext     "$myname" "$seconds")"
+            title_var="$(gettext   "$myname" "$title_var")"
+            btn_act="$(gettext     "$myname" "$btn_act")"
+            success_msg="$(gettext "$myname" "$success_msg")"
+            cancel_msg="$(gettext  "$myname" "$cancel_msg")"
+            ;;
+    esac
     # function's return value
     # defaulting to 1 just to be safe
     retval=1
