@@ -97,6 +97,13 @@ success_msg=""
 # message on cancel
 cancel_msg=""
 
+# usage: dbgprint "message"
+# description: print debug messages
+dbgprint (){
+    if [ -n "$DBGOUT" ]; then
+        printf '%s: %s\n' "$myname" "$*"
+    fi
+}
 
 # return type: int
 # return values: 0, 1
@@ -219,6 +226,7 @@ _help () {
     printf '%s\n' "Options:"
     printf '\t-h, --help\t\tshow this help.\n'
     printf '\t-V, --version\t\tshow program version.\n'
+    printf '\t-d, --debug\t\tshow debug output.\n'
     exit "$code"
 }
 
@@ -238,9 +246,7 @@ systemloginctl_handler () {
     Action="$1"
     shift
     opt="$*"
-    if [ -n "$DBGOUT" ]; then
-        printf '%s: %s\n' "$myname" "handling $ctl $Action $opt"
-    fi
+    dbgprint "handling $ctl $Action $opt"
     $ctl "$Action" "$@"
 }
 
@@ -249,16 +255,12 @@ consolekit_handler () {
     opt="$*"
     case "$Action" in
         lock-session)
-            if [ -n "$DBGOUT" ]; then
-                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
-            fi
+            dbgprint "$ctl unsupported action: $Action"
             Action=""
             opt=""
             ;;
         terminate-session)
-            if [ -n "$DBGOUT" ]; then
-                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
-            fi
+            dbgprint "$ctl unsupported action: $Action"
             Action=""
             opt=""
             ;;
@@ -281,9 +283,7 @@ consolekit_handler () {
             opt="boolean:true"
             ;;
         suspend-then-hibernate)
-            if [ -n "$DBGOUT" ]; then
-                printf '%s: %s\n' "$myname" "$ctl unsupported action: $Action"
-            fi
+            dbgprint "$ctl unsupported action: $Action"
             Action=""
             opt=""
             ;;
@@ -291,9 +291,7 @@ consolekit_handler () {
     if [ -z "$Action" ]; then
         exit 1
     else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "handling $ctl $Action $opt"
-        fi
+        dbgprint "handling $ctl $Action $opt"
         dbus-send \
             --system \
             --print-reply \
@@ -315,9 +313,7 @@ consolekit_handler () {
 do_ctl () {
     action="$1"
     shift
-    if [ -n "$DBGOUT" ]; then
-        printf '%s: %s\n' "$myname" "handling $action with $ctl"
-    fi
+    dbgprint "handling $action with $ctl"
     case "$ctl" in
         *systemctl|*loginctl)
             systemloginctl_handler "$action" "$@"
@@ -334,9 +330,7 @@ do_lock () {
         # default
         do_ctl lock-session "${XDG_SESSION_ID}"
     else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "locking with '$lockcmd'"
-        fi
+        dbgprint "locking with '$lockcmd'"
         $lockcmd
     fi
 
@@ -348,9 +342,7 @@ do_logout () {
         # default
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "logging out with '$lockcmd'"
-        fi
+        dbgprint "logging out with '$lockcmd'"
         $logoutcmd
     fi
 
@@ -396,14 +388,10 @@ call() {
 	cmd="$1"
 	shift
 	if is_call_implemented "${cmd}_override" ; then
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "calling ${cmd}_override"
-        fi
+        dbgprint "calling ${cmd}_override"
 	    ${cmd}_override "$@"
 	else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "calling $cmd"
-        fi
+        dbgprint "calling $cmd"
         ${cmd} "$@"
     fi
 }
@@ -439,13 +427,16 @@ do_sleep () {
 }
 
 while [ $# -gt 0 ]; do case "$1" in
-    debug|-debug|-d)
+    debug|-debug|--debug|-d)
         DBGOUT=1
+        dbgprint "showing debug output"
         ;;
     lock)
+        dbgprint "calling action '$1'"
         call do_lock
         ;;
     logout)
+        dbgprint "calling action '$1'"
         yad_confirm_dialog \
             "system-log-out" \
             "$logout_text_title" \
@@ -461,6 +452,7 @@ while [ $# -gt 0 ]; do case "$1" in
         fi
         ;;
     shutdown|poweroff)
+        dbgprint "calling action '$1'"
         yad_confirm_dialog \
             "system-shutdown" \
             "$shutdown_text_title" \
@@ -476,6 +468,7 @@ while [ $# -gt 0 ]; do case "$1" in
         fi
         ;;
     reboot|restart)
+        dbgprint "calling action '$1'"
         yad_confirm_dialog \
             "system-reboot" \
             "$reboot_text_title" \
@@ -491,6 +484,7 @@ while [ $# -gt 0 ]; do case "$1" in
         fi
         ;;
     suspend|sleep)
+        dbgprint "calling action '$1'"
         yad_confirm_dialog \
             "system-suspend" \
             "$sleep_text_title" \
