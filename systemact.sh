@@ -130,8 +130,10 @@ yad_confirm_dialog () {
     case "$LANGUAGE" in
         C*|en*)
             : # do nothing, no need to translate text
+            dbgprint "language '$LANGUAGE', no attempt to translate"
             ;;
         *)
+            dbgprint "language '$LANGUAGE', trying to find translations"
             # try to translate text
             text_title="$(gettext  "$myname" "$text_title")"
             text_msg="$(gettext    "$myname" "$text_msg")"
@@ -163,6 +165,7 @@ yad_confirm_dialog () {
     "
     btn_cancel="$(gettext "$myname" "$btn_cancel")"
     cancel_img="gnome-info"
+    dbgprint "runnign yad"
     yad \
         --image "$act_image" \
         --text "$text" \
@@ -181,6 +184,8 @@ yad_confirm_dialog () {
 
     ret=$?
 
+    dbgprint "yad returned with '$ret'"
+
     case "$ret" in
         0|70)
             notify-send -i "$act_image" "$title_var" "$success_msg"
@@ -192,6 +197,7 @@ yad_confirm_dialog () {
             ;;
     esac
 
+    dbgprint "yad_confirm_dialog retval '$retval'"
     return "$retval"
 }
 
