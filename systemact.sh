@@ -142,6 +142,7 @@ yad_confirm_dialog () {
             btn_act="$(gettext     "$myname" "$btn_act")"
             success_msg="$(gettext "$myname" "$success_msg")"
             cancel_msg="$(gettext  "$myname" "$cancel_msg")"
+            btn_cancel="$(gettext  "$myname" "$btn_cancel")"
             ;;
     esac
     # function's return value
@@ -163,7 +164,6 @@ yad_confirm_dialog () {
 
     ${text_msg}
     "
-    btn_cancel="$(gettext "$myname" "$btn_cancel")"
     cancel_img="gnome-info"
     dbgprint "runnign yad"
     yad \
