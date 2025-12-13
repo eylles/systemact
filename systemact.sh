@@ -6,6 +6,7 @@ myname="${0##*/}"
 version="@VERSION"
 
 DBGOUT=""
+DRYRUN=""
 
 ################
 # message vars #
@@ -233,6 +234,7 @@ _help () {
     printf '\t-h, --help\t\tshow this help.\n'
     printf '\t-V, --version\t\tshow program version.\n'
     printf '\t-d, --debug\t\tshow debug output.\n'
+    printf '\t-n, --dryrun\t\trun the program but perform no action.\n'
     exit "$code"
 }
 
@@ -253,7 +255,11 @@ systemloginctl_handler () {
     shift
     opt="$*"
     dbgprint "handling $ctl $Action $opt"
-    $ctl "$Action" "$@"
+    if [ -z "$DRYRUN" ]; then
+        $ctl "$Action" "$@"
+    else
+        echo "$(command -v "$ctl") $Action $*"
+    fi
 }
 
 consolekit_handler () {
@@ -298,11 +304,19 @@ consolekit_handler () {
         exit 1
     else
         dbgprint "handling $ctl $Action $opt"
-        dbus-send \
-            --system \
-            --print-reply \
-            --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager \
-            "org.freedesktop.ConsoleKit.Manager.$Action" "$opt"
+        if [ -z "$DRYRUN" ]; then
+            dbus-send \
+                --system \
+                --print-reply \
+                --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager \
+                "org.freedesktop.ConsoleKit.Manager.$Action" "$opt"
+        else
+            echo "dbus-send \\"
+            echo "    --system \\"
+            echo "    --print-reply \\"
+            echo "    --dest=\"org.freedesktop.ConsoleKit\" /org/freedesktop/ConsoleKit/Manager \\"
+            echo "    \"org.freedesktop.ConsoleKit.Manager.$Action\" \"$opt\""
+        fi
     fi
 }
 
@@ -337,7 +351,9 @@ do_lock () {
         do_ctl lock-session "${XDG_SESSION_ID}"
     else
         dbgprint "locking with '$lockcmd'"
-        $lockcmd
+        if [ -z "$DRYRUN" ]; then
+            echo "$lockcmd"
+        fi
     fi
 
 }
@@ -349,7 +365,9 @@ do_logout () {
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
         dbgprint "logging out with '$lockcmd'"
-        $logoutcmd
+        if [ -z "$DRYRUN" ]; then
+            echo "$logoutcmd"
+        fi
     fi
 
 }
@@ -436,6 +454,10 @@ while [ $# -gt 0 ]; do case "$1" in
     debug|-debug|--debug|-d)
         DBGOUT=1
         dbgprint "showing debug output"
+        ;;
+    dryrun|-dryrun|--dryrun|-n)
+        DRYRUN=1
+        dbgprint "dryrun mode"
         ;;
     lock)
         dbgprint "calling action '$1'"
