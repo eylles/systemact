@@ -7,6 +7,7 @@ version="@VERSION"
 
 DBGOUT=""
 DRYRUN=""
+NO_DIALOG=""
 
 ################
 # message vars #
@@ -166,24 +167,28 @@ yad_confirm_dialog () {
     ${text_msg}
     "
     cancel_img="gnome-info"
-    dbgprint "runnign yad"
-    yad \
-        --image "$act_image" \
-        --text "$text" \
-        --buttons-layout=center \
-        --skip-taskbar \
-        --sticky \
-        --undecorated \
-        --title="$title_var" \
-        --on-top \
-        --button="$btn_act" \
-        --button="${btn_cancel}:1" \
-        --timeout-indicator="bottom" \
-        --timeout="$timeout" \
-        --center \
-        --auto-close
+    if [ -z "$NO_DIALOG" ]; then
+        dbgprint "runnign yad"
+        yad \
+            --image "$act_image" \
+            --text "$text" \
+            --buttons-layout=center \
+            --skip-taskbar \
+            --sticky \
+            --undecorated \
+            --title="$title_var" \
+            --on-top \
+            --button="$btn_act" \
+            --button="${btn_cancel}:1" \
+            --timeout-indicator="bottom" \
+            --timeout="$timeout" \
+            --center \
+            --auto-close
 
-    ret=$?
+        ret=$?
+    else
+        ret=0
+    fi
 
     dbgprint "yad returned with '$ret'"
 
@@ -231,6 +236,7 @@ _help () {
     printf '\t%s\n' "reboot/restart"
     printf '\t%s\n' "suspend/sleep"
     printf '%s\n' "Options:"
+    printf '\t-N, --no-dialog\t\tshow no confirmation dialog, always perform action.\n'
     printf '\t-h, --help\t\tshow this help.\n'
     printf '\t-V, --version\t\tshow program version.\n'
     printf '\t-d, --debug\t\tshow debug output.\n'
@@ -458,6 +464,10 @@ while [ $# -gt 0 ]; do case "$1" in
     dryrun|-dryrun|--dryrun|-n)
         DRYRUN=1
         dbgprint "dryrun mode"
+        ;;
+    nodialog|-nodialog|--no-dialog|-N)
+        NO_DIALOG=1
+        dbgprint "no dialog mode"
         ;;
     lock)
         dbgprint "calling action '$1'"
