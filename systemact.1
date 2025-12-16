@@ -11,6 +11,18 @@ systemact is a backend for logout and power menus with command customization to 
 .TP
 .B "\-h, \-\-help"
 Print brief usage information to standard output and exit.
+.TP
+.B "\-N, \-\-no\-dialog"
+show no confirmation dialog, always perform action.
+.TP
+.B "\-V, \-\-version"
+show program version.
+.TP
+.B "\-d, \-\-debug"
+show debug output.
+.TP
+.B "\-n, \-\-dryrun"
+run the program but perform no action.
 .SH ACTIONS
 .TP
 .B "lock"
@@ -109,17 +121,41 @@ In spite of the name
 the config file for systemact is a simple text file that is loaded as if it were a shell script,
 therefore you should be able to write overrides for the functions as simple posix shell functions,
 you should be able to utilize systemact's internal functions inside your custom overrides like the
-do_ctl function in order to add hooks onto do_<action> functions like this:
+do_ctl function, for example in order to add hooks onto do_<action> functions like this:
 
 do_lock_override () {
-    # pause all media players
-    playerctl -a pause
-    # in this case the do_ctl function was okay
-    do_ctl lock-session "${XDG_SESSION_ID}"
+    if [ -z "$DRYRUN" ]; then
+        dbgprint "pausing all media players"
+        playerctl -a pause
+        # in this case the do_ctl function was okay
+        do_ctl lock-session "${XDG_SESSION_ID}"
+    fi
 
 }
 
+As you can see in the example making use of the internal dbgprint function and checking for the
+value of the
+.IR $DRYRUN
+var are encouraged for your custom overrides so that they can work seamlessly with the program's
+dryrun and debug options.
+
 For the do_<action> functions are rather simple and their internals are as follows:
+
+.IR do_ctl
+() {
+    action="$1"
+    shift
+    dbgprint "handling $action with $ctl"
+    case "$ctl" in
+        *systemctl|*loginctl)
+            systemloginctl_handler "$action" "$@"
+            ;;
+        consolekit)
+            consolekit_handler "$action" "$@"
+            ;;
+    esac
+
+}
 
 .IR do_lock
 () {
@@ -128,10 +164,10 @@ For the do_<action> functions are rather simple and their internals are as follo
         # default
         do_ctl lock-session "${XDG_SESSION_ID}"
     else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "locking with '$lockcmd'"
+        dbgprint "locking with '$lockcmd'"
+        if [ -z "$DRYRUN" ]; then
+            echo "$lockcmd"
         fi
-        $lockcmd
     fi
 
 }
@@ -143,10 +179,10 @@ For the do_<action> functions are rather simple and their internals are as follo
         # default
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
-        if [ -n "$DBGOUT" ]; then
-            printf '%s: %s\n' "$myname" "logging out with '$lockcmd'"
+        dbgprint "logging out with '$lockcmd'"
+        if [ -z "$DRYRUN" ]; then
+            echo "$logoutcmd"
         fi
-        $logoutcmd
     fi
 
 }
