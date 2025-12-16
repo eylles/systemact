@@ -12,6 +12,14 @@ of setups.
 
 ![dialog screenshot](dialog.png)
 
+## Installation:
+
+```sh
+make clean
+make
+make install
+```
+
 ## Features:
 
 - Configurable: you can adapt systemact to your setup by configuring the following settings.
