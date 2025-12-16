@@ -543,6 +543,34 @@ while [ $# -gt 0 ]; do case "$1" in
     -V|--version|version)
         printf '%s\n' "$version"
         ;;
+    --)
+        : # do nothing
+        ;;
+    -*)
+        while getopts "dnNhV-" o "$1"; do case "${o}" in
+            d)
+                DBGOUT=1
+                dbgprint "showing debug output"
+                ;;
+            n)
+                DRYRUN=1
+                dbgprint "dryrun mode"
+                ;;
+            N)
+                NO_DIALOG=1
+                dbgprint "no dialog mode"
+                ;;
+            h)
+                _help
+                ;;
+            V)
+                printf '%s\n' "$version"
+                ;;
+            *)
+                _help 1 "${1}"
+                ;;
+        esac done
+        ;;
     *)
         _help 1 "${1}"
         ;;
