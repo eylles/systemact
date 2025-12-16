@@ -17,7 +17,7 @@ of setups.
 - Configurable: you can adapt systemact to your setup by configuring the following settings.
   - logout command: change the command to whatever you want if you got a very custom setup.
   - lock command: using something like slock? not even a problem.
-  - suspend method: from the good old suspend to hibrid sleep and suspend then hibernate fully
+  - suspend method: from the good old suspend to hybrid sleep and suspend then hibernate fully
     supported.
 
 - Extensible: systemact is not limited to just configuring a logout command, lock command or the

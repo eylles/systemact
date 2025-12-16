@@ -215,7 +215,7 @@ else
 fi
 
 _help () {
-        code=0
+    code=0
     if [ -n "$1" ]; then
         if [ -z "$2" ]; then
             av="no argument provided"
