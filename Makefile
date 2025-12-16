@@ -1,6 +1,6 @@
 .POSIX:
 NAME = systemact
-VERSION = 0.2.0
+VERSION = 0.3.0
 PREFIX = $(HOME)/.local
 MANPREFIX = $(PREFIX)/share/man
 LOCALEPREFIX = $(PREFIX)/share/locale
