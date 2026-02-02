@@ -6,7 +6,7 @@ LOCALEPREFIX = $(PREFIX)/share/locale
 EGPREFIX = $(PREFIX)/share/doc/$(NAME)
 .PHONY: install uninstall clean
 
-include version.mk
+include version.mk config.mk
 
 $(NAME):
 	sed "s|@VERSION|$(VERSION)|; s|@examples|$(EGPREFIX)|; s|@localeprefix|$(LOCALEPREFIX)|" \
