@@ -359,6 +359,8 @@ do_lock () {
     else
         dbgprint "locking with '$lockcmd'"
         if [ -z "$DRYRUN" ]; then
+            $lockcmd
+        else
             echo "$lockcmd"
         fi
     fi
@@ -373,6 +375,8 @@ do_logout () {
     else
         dbgprint "logging out with '$logoutcmd'"
         if [ -z "$DRYRUN" ]; then
+            $logoutcmd
+        else
             echo "$logoutcmd"
         fi
     fi
