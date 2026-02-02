@@ -371,7 +371,7 @@ do_logout () {
         # default
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
-        dbgprint "logging out with '$lockcmd'"
+        dbgprint "logging out with '$logoutcmd'"
         if [ -z "$DRYRUN" ]; then
             echo "$logoutcmd"
         fi
