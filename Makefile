@@ -1,11 +1,12 @@
 .POSIX:
 NAME = systemact
-VERSION = 0.3.0
 PREFIX = $(HOME)/.local
 MANPREFIX = $(PREFIX)/share/man
 LOCALEPREFIX = $(PREFIX)/share/locale
 EGPREFIX = $(PREFIX)/share/doc/$(NAME)
 .PHONY: install uninstall clean
+
+include version.mk
 
 $(NAME):
 	sed "s|@VERSION|$(VERSION)|; s|@examples|$(EGPREFIX)|; s|@localeprefix|$(LOCALEPREFIX)|" \
