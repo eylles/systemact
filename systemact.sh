@@ -49,6 +49,7 @@ default_cfg=@examples/config.rc
 config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
 logoutcmd=""
+lockcmd=""
 
 # return type: int
 # usage: min value minimum_value
