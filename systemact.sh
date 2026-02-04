@@ -41,6 +41,13 @@ sleep_btn_act="Suspend now"
 sleep_success_msg="suspending now"
 sleep_cancel_msg="cancelled suspend"
 
+hibernate_text_title="Hibernate"
+hibernate_text_msg="The system will hibernate automatically in"
+hibernate_title_var="Hibernate"
+hibernate_btn_act="Hibernate now"
+hibernate_success_msg="Hibernate now"
+hibernate_cancel_msg="cancelled hibernate"
+
 btn_cancel="Cancel"
 
 seconds="seconds"
@@ -236,6 +243,7 @@ _help () {
     printf '\t%s\n' "shutdown/poweroff"
     printf '\t%s\n' "reboot/restart"
     printf '\t%s\n' "suspend/sleep"
+    printf '\t%s\n' "hibernate"
     printf '%s\n' "Options:"
     printf '\t-N, --no-dialog\t\tshow no confirmation dialog, always perform action.\n'
     printf '\t-h, --help\t\tshow this help.\n'
@@ -540,6 +548,22 @@ while [ $# -gt 0 ]; do case "$1" in
         ret=$?
         if [ "$ret" -eq 0 ]; then
             call do_sleep
+        fi
+        ;;
+    hibernate)
+        dbgprint "calling action '$1'"
+        yad_confirm_dialog \
+            "system-hibernate" \
+            "$hibernate_text_title" \
+            "$hibernate_text_msg" \
+            "$seconds" \
+            "$hibernate_title_var" \
+            "$hibernate_btn_act" \
+            "$hibernate_success_msg" \
+            "$hibernate_cancel_msg"
+        ret=$?
+        if [ "$ret" -eq 0 ]; then
+            call do_hibernate
         fi
         ;;
     -h|--help|help)
