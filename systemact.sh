@@ -242,7 +242,8 @@ _help () {
     printf '\t%s\n' "logout"
     printf '\t%s\n' "shutdown/poweroff"
     printf '\t%s\n' "reboot/restart"
-    printf '\t%s\n' "suspend/sleep"
+    printf '\t%s\n' "sleep"
+    printf '\t%s\n' "suspend"
     printf '\t%s\n' "hibernate"
     printf '%s\n' "Options:"
     printf '\t-N, --no-dialog\t\tshow no confirmation dialog, always perform action.\n'
@@ -547,7 +548,14 @@ while [ $# -gt 0 ]; do case "$1" in
             "$sleep_cancel_msg"
         ret=$?
         if [ "$ret" -eq 0 ]; then
-            call do_sleep
+            case "$1" in
+                sleep)
+                    call do_sleep
+                    ;;
+                suspend)
+                    call do_suspend
+                    ;;
+            esac
         fi
         ;;
     hibernate)
