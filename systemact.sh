@@ -57,6 +57,7 @@ config_dir="${HOME}/.config/systemact"
 config="${config_dir}/config.rc"
 logoutcmd=""
 lockcmd=""
+can_hibernate=""
 
 # return type: int
 # usage: min value minimum_value
@@ -78,6 +79,23 @@ max () {
     result="$1"
   fi
   printf '%d\n' "$result"
+}
+
+# return type: int
+# usage: is_true_string "string"
+is_true_string () {
+    if [ -z "$1" ]; then
+        return 1
+    else
+        case "$1" in
+            [Yy][Ee][Ss]|[Tt][Rr][Uu][Ee])
+                return 0
+                ;;
+            [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee])
+                return 1
+                ;;
+        esac
+    fi
 }
 
 # confirmation dialog
@@ -405,15 +423,27 @@ do_suspend () {
 }
 
 do_hibernate () {
-    do_ctl hibernate
+    if is_true_string "$can_hibernate"; then
+        do_ctl hibernate
+    else
+        do_suspend
+    fi
 }
 
 do_hybrid_sleep () {
-    do_ctl hybrid-sleep
+    if is_true_string "$can_hibernate"; then
+        do_ctl hybrid-sleep
+    else
+        do_suspend
+    fi
 }
 
 do_suspend_then_hibernate () {
-    do_ctl suspend-then-hibernate
+    if is_true_string "$can_hibernate"; then
+        do_ctl suspend-then-hibernate
+    else
+        do_suspend
+    fi
 }
 
 # return type: bool

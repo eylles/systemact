@@ -16,6 +16,12 @@
 #lockcmd=""
 
 
+# werether the system can hibernate
+# possible valies: True, False, Yes, No
+# since we have no realiable programatical way to determine if the system is set up to be able to
+# perform hibernation we have this option here.
+#can_hibernate=""
+
 # the suspend method
 # it will be used by $clt to suspend the system.
 # you can choose among: suspend, hybrid-sleep, suspend-then-hibernate.
