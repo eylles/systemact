@@ -413,7 +413,7 @@ do_hybrid_sleep () {
 }
 
 do_suspend_then_hibernate () {
-    do_ctl suspend
+    do_ctl suspend-then-hibernate
 }
 
 # return type: bool
