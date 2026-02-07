@@ -81,18 +81,27 @@ max () {
   printf '%d\n' "$result"
 }
 
+# type: int
+# value: 0
+# description: unix shell style boolean
+btrue=0
+# type: int
+# value: 1
+# description: unix shell style boolean
+bfalse=1
+
 # return type: int
 # usage: is_true_string "string"
 is_true_string () {
     if [ -z "$1" ]; then
-        return 1
+        return $bfalse
     else
         case "$1" in
             [Yy][Ee][Ss]|[Tt][Rr][Uu][Ee])
-                return 0
+                return $btrue
                 ;;
             [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee])
-                return 1
+                return $bfalse
                 ;;
         esac
     fi
@@ -213,7 +222,7 @@ yad_confirm_dialog () {
 
         ret=$?
     else
-        ret=0
+        ret="$btrue"
     fi
 
     dbgprint "yad returned with '$ret'"
@@ -221,16 +230,16 @@ yad_confirm_dialog () {
     case "$ret" in
         0|70)
             notify-send -i "$act_image" "$title_var" "$success_msg"
-            retval=0
+            retval="$btrue"
             ;;
         1|252)
             notify-send -i "$cancel_img" "$title_var" "$cancel_msg"
-            retval=1
+            retval="$bfalse"
             ;;
     esac
 
     dbgprint "yad_confirm_dialog retval '$retval'"
-    return "$retval"
+    return $retval
 }
 
 if [ -f "$config" ]; then
@@ -241,7 +250,7 @@ else
 fi
 
 _help () {
-    code=0
+    code="$btrue"
     if [ -n "$1" ]; then
         if [ -z "$2" ]; then
             av="no argument provided"
@@ -335,7 +344,7 @@ consolekit_handler () {
             ;;
     esac
     if [ -z "$Action" ]; then
-        exit 1
+        exit "$bfalse"
     else
         dbgprint "handling $ctl $Action $opt"
         if [ -z "$DRYRUN" ]; then
@@ -529,7 +538,7 @@ while [ $# -gt 0 ]; do case "$1" in
             "$logout_success_msg" \
             "$logout_cancel_msg"
         ret=$?
-        if [ "$ret" -eq 0 ]; then
+        if [ "$ret" -eq "$btrue" ]; then
             call do_logout
         fi
         ;;
@@ -545,7 +554,7 @@ while [ $# -gt 0 ]; do case "$1" in
             "$shutdown_success_msg" \
             "$shutdown_cancel_msg"
         ret=$?
-        if [ "$ret" -eq 0 ]; then
+        if [ "$ret" -eq "$btrue" ]; then
             call do_poweroff
         fi
         ;;
@@ -561,7 +570,7 @@ while [ $# -gt 0 ]; do case "$1" in
             "$reboot_success_msg" \
             "$reboot_cancel_msg"
         ret=$?
-        if [ "$ret" -eq 0 ]; then
+        if [ "$ret" -eq "$btrue" ]; then
             call do_reboot
         fi
         ;;
@@ -577,7 +586,7 @@ while [ $# -gt 0 ]; do case "$1" in
             "$sleep_success_msg" \
             "$sleep_cancel_msg"
         ret=$?
-        if [ "$ret" -eq 0 ]; then
+        if [ "$ret" -eq "$btrue" ]; then
             case "$1" in
                 sleep)
                     call do_sleep
@@ -600,7 +609,7 @@ while [ $# -gt 0 ]; do case "$1" in
             "$hibernate_success_msg" \
             "$hibernate_cancel_msg"
         ret=$?
-        if [ "$ret" -eq 0 ]; then
+        if [ "$ret" -eq "$btrue" ]; then
             call do_hibernate
         fi
         ;;
@@ -634,12 +643,12 @@ while [ $# -gt 0 ]; do case "$1" in
                 printf '%s\n' "$version"
                 ;;
             *)
-                _help 1 "${1}"
+                _help "$bfalse" "${1}"
                 ;;
         esac done
         ;;
     *)
-        _help 1 "${1}"
+        _help "$bfalse" "${1}"
         ;;
 esac
 shift
