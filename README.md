@@ -12,6 +12,13 @@ of setups.
 
 ![dialog screenshot](dialog.png)
 
+<p align="center">
+<a href="https://github.com/eylles/systemact" alt="GitHub"><img src="https://img.shields.io/badge/Github-2B3137?style=for-the-badge&logo=Github&logoColor=FFFFFF"></a>
+<a href="https://gitlab.com/eylles/systemact" alt="GitLab"><img src="https://img.shields.io/badge/Gitlab-380D75?style=for-the-badge&logo=Gitlab"></a>
+<a href="https://codeberg.org/eylles/systemact" alt="CodeBerg"><img src="https://img.shields.io/badge/Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=F2F8FC"></a>
+<a href="https://git.devuan.org/eylles/systemact" alt="Devuan"><img src="https://img.shields.io/badge/Devuan-6A6578?style=for-the-badge&logo=devuan&logoColor=F2F2F2"></a>
+</p>
+
 ## Installation:
 
 ```sh
