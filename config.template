@@ -7,6 +7,7 @@
 # systemact will make no check nor comprobation whatsoever for your custom command
 #logoutcmd=""
 
+
 # the lock command
 # internally it is defined as $ctl lock-session ${XDG_SESSION_ID}, which is to use whichever the
 # correct ctl command (loginctl or systemctl) is for your system and pass the lock-session and
@@ -21,6 +22,7 @@
 # since we have no realiable programatical way to determine if the system is set up to be able to
 # perform hibernation we have this option here.
 #can_hibernate=""
+
 
 # the suspend method
 # it will be used by $clt to suspend the system.
