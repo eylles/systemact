@@ -41,6 +41,13 @@ sleep_btn_act="Suspend now"
 sleep_success_msg="suspending now"
 sleep_cancel_msg="cancelled suspend"
 
+hibslp_text_title="Hybrid Sleep"
+hibslp_text_msg="The system will hybrid sleep automatically in"
+hibslp_title_var="Hybrid Sleep"
+hibslp_btn_act="Hybrid sleep now"
+hibslp_success_msg="hybrid sleeping now"
+hibslp_cancel_msg="cancelled hybrid sleep"
+
 hibernate_text_title="Hibernate"
 hibernate_text_msg="The system will hibernate automatically in"
 hibernate_title_var="Hibernate"
@@ -272,6 +279,7 @@ _help () {
     printf '\t%s\n' "sleep"
     printf '\t%s\n' "suspend"
     printf '\t%s\n' "hibernate"
+    printf '\t%s\n' "hybrid-sleep"
     printf '%s\n' "Options:"
     printf '\t-N, --no-dialog\t\tshow no confirmation dialog, always perform action.\n'
     printf '\t-h, --help\t\tshow this help.\n'
@@ -611,6 +619,22 @@ while [ $# -gt 0 ]; do case "$1" in
         ret=$?
         if [ "$ret" -eq "$btrue" ]; then
             call do_hibernate
+        fi
+        ;;
+    hybrid-sleep)
+        dbgprint "calling action '$1'"
+        yad_confirm_dialog \
+            "system-hibernate" \
+            "$hibslp_text_title" \
+            "$hibslp_text_msg" \
+            "$seconds" \
+            "$hibslp_title_var" \
+            "$hibslp_btn_act" \
+            "$hibslp_success_msg" \
+            "$hibslp_cancel_msg"
+        ret=$?
+        if [ "$ret" -eq "$btrue" ]; then
+            call do_hybrid_sleep
         fi
         ;;
     -h|--help|help)
