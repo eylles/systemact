@@ -166,6 +166,8 @@ For the do_<action> functions are rather simple and their internals are as follo
     else
         dbgprint "locking with '$lockcmd'"
         if [ -z "$DRYRUN" ]; then
+            $lockcmd
+        else
             echo "$lockcmd"
         fi
     fi
@@ -179,8 +181,10 @@ For the do_<action> functions are rather simple and their internals are as follo
         # default
         do_ctl terminate-session "${XDG_SESSION_ID}"
     else
-        dbgprint "logging out with '$lockcmd'"
+        dbgprint "logging out with '$logoutcmd'"
         if [ -z "$DRYRUN" ]; then
+            $logoutcmd
+        else
             echo "$logoutcmd"
         fi
     fi
