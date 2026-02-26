@@ -37,8 +37,17 @@ Power off the system.
 .B "reboot, restart"
 Restart the system.
 .TP
-.B "suspend, sleep"
-Suspend the system with a configurable command.
+.B "suspend"
+Suspend the system.
+.TP
+.B "hibernate"
+Hibernate the system.
+.TP
+.B "hybrid-sleep"
+suspend the system with hybrid-sleep.
+.TP
+.B "sleep"
+Suspend the system with a user configured suspend method.
 .SH CONFIGURATION
 .P
 The whole reason of systemact is to have flexibility and provide a backend command for a logout menu
@@ -53,7 +62,9 @@ variable that points to a seat control facility, usually
 .B systemctl
 or
 .B loginctl
-which are provided by systemd and elogind respectively, the ctl command is determined by systemact
+which are provided by systemd and elogind respectively,
+.B consolekit
+is also supported, the ctl command is determined by systemact
 at runtime by checking the available commands in the system via command -v, it used to check the
 symlink in
 .B /sbin/init
@@ -80,10 +91,18 @@ Command used to lock the session, by default
 lock-session
 .B ${XDG_SESSION_ID}
 .TP
+.B can_hibernate
+werether the system can hibernate or not, since we have no realiable programatical way to determine
+if the system is set up to be able to perform hibernation we have this option here, by default the
+program assumes the system cannot hibernate and all actions that depend on hibernation fallback to
+suspend.
+possible values: True, False, Yes, No
+.TP
 .B suspend_method
-The method by which the system will be suspended, you can choose between suspend, hybrid-sleep and
-suspend-then-hibernate,
-by default
+The method by which the
+.B sleep
+action will suspend the system , you can choose between suspend, hibernate, hybrid-sleep and
+suspend-then-hibernate, by default
 .B do_ctl
 suspend
 .TP
@@ -139,6 +158,51 @@ value of the
 var are encouraged for your custom overrides so that they can work seamlessly with the program's
 dryrun and debug options.
 
+The internal vars whose use is intended to be leveraged by user overrides are:
+
+.TP
+.IR DRYRUN
+starts as empty and set to "1" in dyrun mode.
+
+.TP
+.IR btrue
+unix shell style boolean, internally it is the int 0, inverse of the C style boolean.
+
+.TP
+.IR bfalse
+unix shell style boolean, internally it is the int 1, inverse of the C style boolean.
+
+
+.P
+The internal functions whose use is intended to be leveraged by user overrides are:
+
+
+.TP
+.IR dbgprint
+a simple function to print out debug messages to terminal, use as dbgprint "my debug message"
+
+.TP
+.IR min
+return the minimum of the 2 values passed, use as min value min_value
+
+.TP
+.IR max
+return the maximum of the 2 values passed, use as max value max_value
+
+.TP
+.IR is_true_string
+a simple function to check if the argument string is true or false, it admits the empty string "",
+along the strings
+.B true
+and
+.B false
+case insensitive and will return
+.IR btrue
+or
+.IR bfalse
+accordingly.
+
+.TP
 For the do_<action> functions are rather simple and their internals are as follows:
 
 .IR do_ctl
