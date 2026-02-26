@@ -41,7 +41,7 @@ make install
               with your own custom functions, commands and scripts if you need any additional hooks
               to run along those actions.
 
-- Reduces work: it provides confirmation dialogs for shutdown, reboot, suspend and logout.
+- Reduces work: it provides confirmation dialogs for shutdown, reboot, suspend, hibernate and logout.
 
 - Minimal: very few dependencies.
   - readlink    - coreutils.
@@ -56,4 +56,6 @@ make install
 
 - Init freedom: using systemd or not is not an issue, systemctl and loginctl are both supported, not
                 to mention we also have support for consolekit out of the box and if that is not
-                enough you can overwrite the functions however you need for your setup.
+                enough you can overwrite the functions however you need for your setup so if you are
+                doing raw sudo with a sudoers file or even something like doas that is not a
+                problem, just add your override functions in the config and you're set.
