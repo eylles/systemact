@@ -12,6 +12,7 @@ $(NAME):
 	sed "s|@VERSION|$(VERSION)|; s|@examples|$(EGPREFIX)|; s|@localeprefix|$(LOCALEPREFIX)|" \
 		systemact.sh > $(NAME)
 	cp config.template  config.rc
+	sed "s!VERSION!$(VERSION)!g" systemact.1.in > $(NAME).1
 
 install: $(NAME)
 	chmod 755 $(NAME)
@@ -23,7 +24,7 @@ install: $(NAME)
 	msgfmt po/es.po -o $(DESTDIR)$(LOCALEPREFIX)/es/LC_MESSAGES/$(NAME).mo
 	cp -v $(NAME) $(DESTDIR)${PREFIX}/bin/
 	cp -v config.rc $(DESTDIR)$(EGPREFIX)/
-	sed "s!VERSION!$(VERSION)!g" systemact.1 > $(DESTDIR)$(MANPREFIX)/man1/$(NAME).1
+	cp -v $(NAME).1 $(DESTDIR)$(MANPREFIX)/man1/$(NAME).1
 
 uninstall:
 	rm -vf $(DESTDIR)$(PREFIX)/bin/$(NAME)
@@ -32,4 +33,4 @@ uninstall:
 	rm -rf $(DESTDIR)$(EGPREFIX)
 
 clean:
-	rm -rf $(NAME) config.rc
+	rm -rf $(NAME) $(NAME).1 config.rc
