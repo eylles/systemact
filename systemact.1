@@ -201,13 +201,34 @@ For the do_<action> functions are rather simple and their internals are as follo
 () { do_ctl suspend }
 
 .IR do_hibernate
-() { do_ctl hibernate }
+() {
+    if is_true_string "$can_hibernate"; then
+        do_ctl hibernate
+    else
+        do_suspend
+    fi
+
+}
 
 .IR do_hybrid_sleep
-() { do_ctl hybrid-sleep }
+() {
+    if is_true_string "$can_hibernate"; then
+        do_ctl hybrid-sleep
+    else
+        do_suspend
+    fi
+
+}
 
 .IR do_suspend_then_hibernate
-() { do_ctl suspend }
+() {
+    if is_true_string "$can_hibernate"; then
+        do_ctl suspend-then-hibernate
+    else
+        do_suspend
+    fi
+
+}
 
 .IR do_sleep
 () {
